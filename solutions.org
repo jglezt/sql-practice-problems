@@ -1,11 +1,15 @@
 * Solutions for SQL Practice book
+** Preparation
+*** Postgresql
+  https://github.com/shepard8/SqlPractice_PostgreSQL/blob/main/SQLPracticeProblems_PostgreSQL_PracticeDBSetup.sql
 :PROPERTIES:
 :header-args:sql: :dbpassword 123
 :header-args:sql: :dbuser test_user
 :header-args:sql: :dbpassword 123
 :END:
-** Preparation
-*** Get WSL host gateway
+*** MS SQL Server
+**** Preparation
+***** Get WSL host gateway
  #+NAME: get_wsl_gateway
  #+begin_src sh
    ip route list |
