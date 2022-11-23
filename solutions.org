@@ -1,0 +1,631 @@
+* Solutions for SQL Practice book
+:PROPERTIES:
+:header-args:sql: :dbpassword 123
+:header-args:sql: :dbuser test_user
+:header-args:sql: :dbpassword 123
+:END:
+** Preparation
+*** Get WSL host gateway
+ #+NAME: get_wsl_gateway
+ #+begin_src sh
+   ip route list |
+       head -n 1 |
+       awk '{print $3}'
+ #+end_src
+
+ #+RESULTS: get_wsl_gateway
+ : 172.21.160.1
+
+** DONE 1. Which shippers do we have?
+CLOSED: [2022-07-22 Fri 23:59]
+:LOGBOOK:
+- State "DONE"       from              [2022-07-22 Fri 23:59]
+:END:
+
+#+header: :database master
+#+begin_src sql :dbhost 172.21.160.1:52556
+  SELECT * FROM dbo.shippers
+  go
+#+end_src
+
+#+RESULTS:
+| \connect: sqsh_getinput: Error opening /dev/tty for read: No such device or address |
+|-------------------------------------------------------------------------------------|
+** DONE 2. Certain fields from Categories
+CLOSED: [2022-07-23 Sat 00:01]
+:LOGBOOK:
+- State "DONE"       from              [2022-07-23 Sat 00:01]
+:END:
+
+#+begin_src sql :session solutions
+  SELECT CategoryName, Description FROM dbo.Categories
+  go
+#+end_src
+
+#+RESULTS:
+| CategoryName   | Description                                                |
+|----------------+------------------------------------------------------------|
+| Beverages      | Soft drinks, coffees, teas, beers, and ales                |
+| Condiments     | Sweet and savory sauces, relishes, spreads, and seasonings |
+| Confections    | Desserts, candies, and sweet breads                        |
+| Dairy Products | Cheeses                                                    |
+| Grains/Cereals | Breads, crackers, pasta, and cereal                        |
+| Meat/Poultry   | Prepared meats                                             |
+| Produce        | Dried fruit and bean curd                                  |
+| Seafood        | Seaweed and fish                                           |
+** DONE 3. Sales Representatives
+CLOSED: [2022-07-23 Sat 00:05]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-07-23 Sat 00:05]
+- State "IN_PROGRESS" from "DONE"       [2022-07-23 Sat 00:02]
+- State "DONE"       from              [2022-07-23 Sat 00:01]
+:END:
+
+   * How does the sales representatives look like in the table
+
+#+header: :engine sqsh
+#+header: :dbhost 172.21.160.1:52556
+#+header: :dbuser test_user
+#+header: :dbpassword 123
+#+header: :database master
+#+begin_src sql
+  SELECT FirstName, LastName, HireDate
+  FROM dbo.Employees
+  WHERE title='Sales Representative'
+  go
+#+end_src
+
+#+RESULTS:
+| FirstName | LastName  | HireDate            |
+|-----------+-----------+---------------------|
+| Nancy     | Davolio   | May  1 2010 12:00AM |
+| Janet     | Leverling | Apr  1 2010 12:00AM |
+| Margaret  | Peacock   | May  3 2011 12:00AM |
+| Michael   | Suyama    | Oct 17 2011 12:00AM |
+| Robert    | King      | Jan  2 2012 12:00AM |
+| Anne      | Dodsworth | Nov 15 2012 12:00AM |
+** DONE 4. Sales Representatives in the United States
+CLOSED: [2022-07-23 Sat 00:08]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-07-23 Sat 00:08]
+- State "IN_PROGRESS" from "IN_PROGRESS" [2022-07-23 Sat 00:06]
+:END:
+
+   * How does the unitated states look in the database
+#+header: :engine sqsh
+#+header: :dbhost 172.21.160.1:52556
+#+header: :dbuser test_user
+#+header: :dbpassword 123
+#+header: :database master
+#+begin_src sql
+  SELECT FirstName, LastName, HireDate
+  FROM dbo.Employees
+  WHERE title='Sales Representative' AND country='USA'
+  go
+#+end_src
+
+#+RESULTS:
+| FirstName | LastName  | HireDate            |
+|-----------+-----------+---------------------|
+| Nancy     | Davolio   | May  1 2010 12:00AM |
+| Janet     | Leverling | Apr  1 2010 12:00AM |
+| Margaret  | Peacock   | May  3 2011 12:00AM |
+** DONE 5. Orders placed by specific EmployeeID
+CLOSED: [2022-07-23 Sat 00:11]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-07-23 Sat 00:11]
+- State "IN_PROGRESS" from "DONE"       [2022-07-23 Sat 00:08]
+:END:
+
+#+header: :engine sqsh
+#+header: :dbhost 172.21.160.1:52556
+#+header: :dbuser test_user
+#+header: :dbpassword 123
+#+header: :database master
+#+begin_src sql
+  SELECT OrderID, OrderDate
+  FROM dbo.orders
+  WHERE EmployeeID=5
+  go
+#+end_src
+
+#+RESULTS:
+| OrderID | OrderDate           |
+|---------+---------------------|
+|   10248 | Jul  4 2014 08:00AM |
+|   10254 | Jul 11 2014 02:00AM |
+|   10269 | Jul 31 2014 12:00AM |
+|   10297 | Sep  4 2014 09:00PM |
+|   10320 | Oct  3 2014 12:00PM |
+|   10333 | Oct 18 2014 06:00PM |
+|   10358 | Nov 20 2014 05:00AM |
+|   10359 | Nov 21 2014 02:00PM |
+|   10372 | Dec  4 2014 10:00AM |
+|   10378 | Dec 10 2014 12:00AM |
+|   10397 | Dec 27 2014 05:00PM |
+|   10463 | Mar  4 2015 01:00PM |
+|   10474 | Mar 13 2015 04:00PM |
+|   10477 | Mar 17 2015 02:00AM |
+|   10529 | May  7 2015 01:00AM |
+|   10549 | May 27 2015 03:00AM |
+|   10569 | Jun 16 2015 03:00PM |
+|   10575 | Jun 20 2015 10:00PM |
+|   10607 | Jul 22 2015 09:00AM |
+|   10648 | Aug 28 2015 10:00PM |
+|   10649 | Aug 28 2015 12:00AM |
+|   10650 | Aug 29 2015 06:00AM |
+|   10654 | Sep  2 2015 07:00AM |
+|   10675 | Sep 19 2015 06:00AM |
+|   10711 | Oct 21 2015 03:00AM |
+|   10714 | Oct 22 2015 03:00AM |
+|   10721 | Oct 29 2015 08:00AM |
+|   10730 | Nov  5 2015 07:00AM |
+|   10761 | Dec  2 2015 08:00AM |
+|   10812 | Jan  2 2016 02:00AM |
+|   10823 | Jan  9 2016 05:00PM |
+|   10841 | Jan 20 2016 09:00PM |
+|   10851 | Jan 26 2016 12:00AM |
+|   10866 | Feb  3 2016 01:00AM |
+|   10869 | Feb  4 2016 09:00AM |
+|   10870 | Feb  4 2016 12:00PM |
+|   10872 | Feb  5 2016 06:00AM |
+|   10874 | Feb  6 2016 02:00PM |
+|   10899 | Feb 20 2016 09:00AM |
+|   10922 | Mar  3 2016 02:00AM |
+|   10954 | Mar 17 2016 04:00PM |
+|   11043 | Apr 22 2016 05:00PM |
+** DONE 6. Suppliers and ContactTitles
+CLOSED: [2022-07-23 Sat 00:17]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-07-23 Sat 00:17]
+- State "IN_PROGRESS" from "DONE"       [2022-07-23 Sat 00:11]
+:END:
+
+#+header: :engine sqsh
+#+header: :dbhost 172.21.160.1:52556
+#+header: :dbuser test_user
+#+header: :dbpassword 123
+#+header: :database master
+#+begin_src sql
+  SELECT SupplierID, ContactName, ContactTitle
+  FROM dbo.suppliers
+  WHERE NOT ContactTitle='Marketing Manager' -- can be !=
+  go
+#+end_src
+
+#+RESULTS:
+| SupplierID | ContactName                | ContactTitle                 |
+|------------+----------------------------+------------------------------|
+|          1 | Charlotte Cooper           | Purchasing Manager           |
+|          2 | Shelley Burke              | Order Administrator          |
+|          3 | Regina Murphy              | Sales Representative         |
+|          5 | Antonio del Valle Saavedra | Export Administrator         |
+|          6 | Mayumi Ohno                | Marketing Representative     |
+|          8 | Peter Wilson               | Sales Representative         |
+|          9 | Lars Peterson              | Sales Agent                  |
+|         11 | Petra Winkler              | Sales Manager                |
+|         12 | Martin Bein                | International Marketing Mgr. |
+|         13 | Sven Petersen              | Coordinator Foreign Markets  |
+|         14 | Elio Rossi                 | Sales Representative         |
+|         16 | Cheryl Saylor              | Regional Account Rep.        |
+|         17 | Michael Björn              | Sales Representative         |
+|         18 | Guylène Nodier             | Sales Manager                |
+|         19 | Robb Merchant              | Wholesale Account Agent      |
+|         20 | Chandra Leka               | Owner                        |
+|         21 | Niels Petersen             | Sales Manager                |
+|         22 | Dirk Luchte                | Accounting Manager           |
+|         23 | Anne Heikkonen             | Product Manager              |
+|         24 | Wendy Mackenzie            | Sales Representative         |
+|         26 | Giovanni Giudici           | Order Administrator          |
+|         27 | Marie Delamare             | Sales Manager                |
+|         28 | Eliane Noz                 | Sales Representative         |
+|         29 | Chantal Goulet             | Accounting Manager           |
+** DONE 7. Products with "queso" in ProductName
+CLOSED: [2022-07-23 Sat 00:24]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-07-23 Sat 00:24]
+- State "IN_PROGRESS" from "IN_PROGRESS" [2022-07-23 Sat 00:18]
+:END:
+
+   * Upper for any case string comparision
+
+#+header: :engine sqsh
+#+header: :dbhost 172.21.160.1:52556
+#+header: :dbuser test_user
+#+header: :dbpassword 123
+#+header: :database master
+#+begin_src sql
+  SELECT ProductID, ProductName
+  FROM dbo.products
+  WHERE UPPER(ProductName) LIKE '%QUESO%'
+  go
+#+end_src
+
+#+RESULTS:
+| ProductID | ProductName               |
+|-----------+---------------------------|
+|        11 | Queso Cabrales            |
+|        12 | Queso Manchego La Pastora |
+** DONE 8. Orders shipping to France or Belgium
+CLOSED: [2022-07-23 Sat 00:26]
+
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-07-23 Sat 00:26]
+- State "IN_PROGRESS" from "DONE"       [2022-07-23 Sat 00:24]
+:END:
+
+   * Upper for any case string comparision
+
+#+header: :engine sqsh
+#+header: :dbhost 172.21.160.1:52556
+#+header: :dbuser test_user
+#+header: :dbpassword 123
+#+header: :database master
+#+begin_src sql
+  SELECT OrderID, CustomerID, ShipCountry
+  FROM dbo.orders
+  WHERE ShipCountry IN ('France', 'Belgium')
+  go
+#+end_src
+
+#+RESULTS:
+| OrderID | CustomerID | ShipCountry |
+|---------+------------+-------------|
+|   10248 | VINET      | France      |
+|   10251 | VICTE      | France      |
+|   10252 | SUPRD      | Belgium     |
+|   10265 | BLONP      | France      |
+|   10274 | VINET      | France      |
+|   10295 | VINET      | France      |
+|   10297 | BLONP      | France      |
+|   10302 | SUPRD      | Belgium     |
+|   10311 | DUMON      | France      |
+|   10331 | BONAP      | France      |
+|   10334 | VICTE      | France      |
+|   10340 | BONAP      | France      |
+|   10350 | LAMAI      | France      |
+|   10358 | LAMAI      | France      |
+|   10360 | BLONP      | France      |
+|   10362 | BONAP      | France      |
+|   10371 | LAMAI      | France      |
+|   10408 | FOLIG      | France      |
+|   10413 | LAMAI      | France      |
+|   10425 | LAMAI      | France      |
+|   10436 | BLONP      | France      |
+|   10449 | BLONP      | France      |
+|   10450 | VICTE      | France      |
+|   10454 | LAMAI      | France      |
+|   10458 | SUPRD      | Belgium     |
+|   10459 | VICTE      | France      |
+|   10463 | SUPRD      | Belgium     |
+|   10470 | BONAP      | France      |
+|   10475 | SUPRD      | Belgium     |
+|   10478 | VICTE      | France      |
+|   10480 | FOLIG      | France      |
+|   10493 | LAMAI      | France      |
+|   10500 | LAMAI      | France      |
+|   10511 | BONAP      | France      |
+|   10525 | BONAP      | France      |
+|   10529 | MAISD      | Belgium     |
+|   10546 | VICTE      | France      |
+|   10559 | BLONP      | France      |
+|   10566 | BLONP      | France      |
+|   10584 | BLONP      | France      |
+|   10609 | DUMON      | France      |
+|   10610 | LAMAI      | France      |
+|   10628 | BLONP      | France      |
+|   10631 | LAMAI      | France      |
+|   10634 | FOLIG      | France      |
+|   10649 | MAISD      | Belgium     |
+|   10663 | BONAP      | France      |
+|   10671 | FRANR      | France      |
+|   10679 | BLONP      | France      |
+|   10683 | DUMON      | France      |
+|   10715 | BONAP      | France      |
+|   10730 | BONAP      | France      |
+|   10732 | BONAP      | France      |
+|   10737 | VINET      | France      |
+|   10738 | SPECD      | France      |
+|   10739 | VINET      | France      |
+|   10755 | BONAP      | France      |
+|   10760 | MAISD      | Belgium     |
+|   10763 | FOLIG      | France      |
+|   10767 | SUPRD      | Belgium     |
+|   10787 | LAMAI      | France      |
+|   10789 | FOLIG      | France      |
+|   10806 | VICTE      | France      |
+|   10814 | VICTE      | France      |
+|   10826 | BLONP      | France      |
+|   10827 | BONAP      | France      |
+|   10832 | LAMAI      | France      |
+|   10841 | SUPRD      | Belgium     |
+|   10843 | VICTE      | France      |
+|   10846 | SUPRD      | Belgium     |
+|   10850 | VICTE      | France      |
+|   10858 | LACOR      | France      |
+|   10860 | FRANR      | France      |
+|   10871 | BONAP      | France      |
+|   10876 | BONAP      | France      |
+|   10885 | SUPRD      | Belgium     |
+|   10890 | DUMON      | France      |
+|   10892 | MAISD      | Belgium     |
+|   10896 | MAISD      | Belgium     |
+|   10907 | SPECD      | France      |
+|   10923 | LAMAI      | France      |
+|   10927 | LACOR      | France      |
+|   10930 | SUPRD      | Belgium     |
+|   10932 | BONAP      | France      |
+|   10940 | BONAP      | France      |
+|   10964 | SPECD      | France      |
+|   10971 | FRANR      | France      |
+|   10972 | LACOR      | France      |
+|   10973 | LACOR      | France      |
+|   10978 | MAISD      | Belgium     |
+|   11004 | MAISD      | Belgium     |
+|   11035 | SUPRD      | Belgium     |
+|   11038 | SUPRD      | Belgium     |
+|   11043 | SPECD      | France      |
+|   11051 | LAMAI      | France      |
+|   11076 | BONAP      | France      |
+** DONE 9. Order shipping to any country in Latin Aerica
+CLOSED: [2022-07-23 Sat 00:28]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-07-23 Sat 00:28]
+- State "IN_PROGRESS" from "DONE"       [2022-07-23 Sat 00:26]
+:END:
+
+#+header: :engine sqsh
+#+header: :dbhost 172.21.160.1:52556
+#+header: :dbuser test_user
+#+header: :dbpassword 123
+#+header: :database master
+#+begin_src sql
+  SELECT OrderID, CustomerID, ShipCountry
+  FROM dbo.orders
+  WHERE ShipCountry IN ('Mexico', 'Brazil', 'Argentina', 'Venezuela')
+  go
+#+end_src
+
+#+RESULTS:
+| OrderID | CustomerID | ShipCountry |
+|---------+------------+-------------|
+|   10250 | HANAR      | Brazil      |
+|   10253 | HANAR      | Brazil      |
+|   10256 | WELLI      | Brazil      |
+|   10257 | HILAA      | Venezuela   |
+|   10259 | CENTC      | Mexico      |
+|   10261 | QUEDE      | Brazil      |
+|   10268 | GROSR      | Venezuela   |
+|   10276 | TORTU      | Mexico      |
+|   10283 | LILAS      | Venezuela   |
+|   10287 | RICAR      | Brazil      |
+|   10290 | COMMI      | Brazil      |
+|   10291 | QUEDE      | Brazil      |
+|   10292 | TRADH      | Brazil      |
+|   10293 | TORTU      | Mexico      |
+|   10296 | LILAS      | Venezuela   |
+|   10299 | RICAR      | Brazil      |
+|   10304 | TORTU      | Mexico      |
+|   10308 | ANATR      | Mexico      |
+|   10319 | TORTU      | Mexico      |
+|   10322 | PERIC      | Mexico      |
+|   10330 | LILAS      | Venezuela   |
+|   10347 | FAMIA      | Brazil      |
+|   10354 | PERIC      | Mexico      |
+|   10357 | LILAS      | Venezuela   |
+|   10365 | ANTON      | Mexico      |
+|   10372 | QUEEN      | Brazil      |
+|   10379 | QUEDE      | Brazil      |
+|   10381 | LILAS      | Venezuela   |
+|   10386 | FAMIA      | Brazil      |
+|   10395 | HILAA      | Venezuela   |
+|   10405 | LINOD      | Venezuela   |
+|   10406 | QUEEN      | Brazil      |
+|   10409 | OCEAN      | Argentina   |
+|   10414 | FAMIA      | Brazil      |
+|   10420 | WELLI      | Brazil      |
+|   10421 | QUEDE      | Brazil      |
+|   10423 | GOURL      | Brazil      |
+|   10447 | RICAR      | Brazil      |
+|   10448 | RANCH      | Argentina   |
+|   10461 | LILAS      | Venezuela   |
+|   10466 | COMMI      | Brazil      |
+|   10474 | PERIC      | Mexico      |
+|   10476 | HILAA      | Venezuela   |
+|   10481 | RICAR      | Brazil      |
+|   10485 | LINOD      | Venezuela   |
+|   10486 | HILAA      | Venezuela   |
+|   10487 | QUEEN      | Brazil      |
+|   10490 | HILAA      | Venezuela   |
+|   10494 | COMMI      | Brazil      |
+|   10496 | TRADH      | Brazil      |
+|   10498 | HILAA      | Venezuela   |
+|   10499 | LILAS      | Venezuela   |
+|   10502 | PERIC      | Mexico      |
+|   10507 | ANTON      | Mexico      |
+|   10512 | FAMIA      | Brazil      |
+|   10518 | TORTU      | Mexico      |
+|   10521 | CACTU      | Argentina   |
+|   10531 | OCEAN      | Argentina   |
+|   10535 | ANTON      | Mexico      |
+|   10541 | HANAR      | Brazil      |
+|   10543 | LILAS      | Venezuela   |
+|   10552 | HILAA      | Venezuela   |
+|   10563 | RICAR      | Brazil      |
+|   10573 | ANTON      | Mexico      |
+|   10576 | TORTU      | Mexico      |
+|   10581 | FAMIA      | Brazil      |
+|   10585 | WELLI      | Brazil      |
+|   10587 | QUEDE      | Brazil      |
+|   10601 | HILAA      | Venezuela   |
+|   10606 | TRADH      | Brazil      |
+|   10613 | HILAA      | Venezuela   |
+|   10622 | RICAR      | Brazil      |
+|   10625 | ANATR      | Mexico      |
+|   10637 | QUEEN      | Brazil      |
+|   10638 | LINOD      | Venezuela   |
+|   10641 | HILAA      | Venezuela   |
+|   10644 | WELLI      | Brazil      |
+|   10645 | HANAR      | Brazil      |
+|   10647 | QUEDE      | Brazil      |
+|   10648 | RICAR      | Brazil      |
+|   10650 | FAMIA      | Brazil      |
+|   10652 | GOURL      | Brazil      |
+|   10659 | QUEEN      | Brazil      |
+|   10676 | TORTU      | Mexico      |
+|   10677 | ANTON      | Mexico      |
+|   10682 | ANTON      | Mexico      |
+|   10685 | GOURL      | Brazil      |
+|   10690 | HANAR      | Brazil      |
+|   10697 | LINOD      | Venezuela   |
+|   10704 | QUEEN      | Brazil      |
+|   10705 | HILAA      | Venezuela   |
+|   10709 | GOURL      | Brazil      |
+|   10716 | RANCH      | Argentina   |
+|   10720 | QUEDE      | Brazil      |
+|   10725 | FAMIA      | Brazil      |
+|   10728 | QUEEN      | Brazil      |
+|   10729 | LINOD      | Venezuela   |
+|   10734 | GOURL      | Brazil      |
+|   10759 | ANATR      | Mexico      |
+|   10770 | HANAR      | Brazil      |
+|   10777 | GOURL      | Brazil      |
+|   10780 | LILAS      | Venezuela   |
+|   10782 | CACTU      | Argentina   |
+|   10783 | HANAR      | Brazil      |
+|   10785 | GROSR      | Venezuela   |
+|   10786 | QUEEN      | Brazil      |
+|   10790 | GOURL      | Brazil      |
+|   10794 | QUEDE      | Brazil      |
+|   10796 | HILAA      | Venezuela   |
+|   10803 | WELLI      | Brazil      |
+|   10809 | WELLI      | Brazil      |
+|   10811 | LINOD      | Venezuela   |
+|   10813 | RICAR      | Brazil      |
+|   10819 | CACTU      | Argentina   |
+|   10823 | LILAS      | Venezuela   |
+|   10828 | RANCH      | Argentina   |
+|   10830 | TRADH      | Brazil      |
+|   10834 | TRADH      | Brazil      |
+|   10838 | LINOD      | Venezuela   |
+|   10839 | TRADH      | Brazil      |
+|   10840 | LINOD      | Venezuela   |
+|   10842 | TORTU      | Mexico      |
+|   10851 | RICAR      | Brazil      |
+|   10856 | ANTON      | Mexico      |
+|   10863 | HILAA      | Venezuela   |
+|   10868 | QUEEN      | Brazil      |
+|   10877 | RICAR      | Brazil      |
+|   10881 | CACTU      | Argentina   |
+|   10886 | HANAR      | Brazil      |
+|   10898 | OCEAN      | Argentina   |
+|   10899 | LILAS      | Venezuela   |
+|   10900 | WELLI      | Brazil      |
+|   10901 | HILAA      | Venezuela   |
+|   10903 | HANAR      | Brazil      |
+|   10905 | WELLI      | Brazil      |
+|   10913 | QUEEN      | Brazil      |
+|   10914 | QUEEN      | Brazil      |
+|   10915 | TORTU      | Mexico      |
+|   10916 | RANCH      | Argentina   |
+|   10919 | LINOD      | Venezuela   |
+|   10922 | HANAR      | Brazil      |
+|   10925 | HANAR      | Brazil      |
+|   10926 | ANATR      | Mexico      |
+|   10935 | WELLI      | Brazil      |
+|   10937 | CACTU      | Argentina   |
+|   10954 | LINOD      | Venezuela   |
+|   10957 | HILAA      | Venezuela   |
+|   10958 | OCEAN      | Argentina   |
+|   10959 | GOURL      | Brazil      |
+|   10960 | HILAA      | Venezuela   |
+|   10961 | QUEEN      | Brazil      |
+|   10969 | COMMI      | Brazil      |
+|   10976 | HILAA      | Venezuela   |
+|   10981 | HANAR      | Brazil      |
+|   10986 | OCEAN      | Argentina   |
+|   10989 | QUEDE      | Brazil      |
+|   10995 | PERIC      | Mexico      |
+|   10997 | LILAS      | Venezuela   |
+|   11014 | LINOD      | Venezuela   |
+|   11019 | RANCH      | Argentina   |
+|   11022 | HANAR      | Brazil      |
+|   11039 | LINOD      | Venezuela   |
+|   11042 | COMMI      | Brazil      |
+|   11049 | GOURL      | Brazil      |
+|   11052 | HANAR      | Brazil      |
+|   11054 | CACTU      | Argentina   |
+|   11055 | HILAA      | Venezuela   |
+|   11059 | RICAR      | Brazil      |
+|   11065 | LILAS      | Venezuela   |
+|   11068 | QUEEN      | Brazil      |
+|   11069 | TORTU      | Mexico      |
+|   11071 | LILAS      | Venezuela   |
+|   11073 | PERIC      | Mexico      |
+** DONE 10. Employees, in order of age
+CLOSED: [2022-07-23 Sat 00:30]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-07-23 Sat 00:30]
+- State "IN_PROGRESS" from "DONE"       [2022-07-23 Sat 00:28]
+:END:
+
+#+header: :engine sqsh
+#+header: :dbhost 172.21.160.1:52556
+#+header: :dbuser test_user
+#+header: :dbpassword 123
+#+header: :database master
+#+begin_src sql
+  SELECT FirstName, LastName, Title, BirthDate
+  FROM dbo.employees
+  ORDER BY BirthDate
+  go
+#+end_src
+
+#+RESULTS:
+| FirstName | LastName  | Title                    | BirthDate           |
+|-----------+-----------+--------------------------+---------------------|
+| Margaret  | Peacock   | Sales Representative     | Sep 19 1955 12:00AM |
+| Nancy     | Davolio   | Sales Representative     | Dec  8 1966 12:00AM |
+| Andrew    | Fuller    | Vice President, Sales    | Feb 19 1970 12:00AM |
+| Steven    | Buchanan  | Sales Manager            | Mar  4 1973 12:00AM |
+| Laura     | Callahan  | Inside Sales Coordinator | Jan  9 1976 12:00AM |
+| Robert    | King      | Sales Representative     | May 29 1978 12:00AM |
+| Michael   | Suyama    | Sales Representative     | Jul  2 1981 12:00AM |
+| Janet     | Leverling | Sales Representative     | Aug 30 1981 12:00AM |
+| Anne      | Dodsworth | Sales Representative     | Jan 27 1984 12:00AM |
+** DONE 11. Showing only the Date with a DateTime field
+CLOSED: [2022-07-23 Sat 00:47]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-07-23 Sat 00:47]
+- State "IN_PROGRESS" from "DONE"       [2022-07-23 Sat 00:30]
+:END:
+
+  * The convert function takes the type of origin (use varchar so that
+    the format is applied) and the format code, which in this case is 105
+    YYYY-MM-DD
+
+#+header: :engine sqsh
+#+header: :dbhost 172.21.160.1:52556
+#+header: :dbuser test_user
+#+header: :dbpassword 123
+#+header: :database master
+#+begin_src sql
+  SELECT FirstName, LastName, Title, CONVERT(varchar, BirthDate, 105)
+  AS BirthRate
+  FROM dbo.employees
+  ORDER BY BirthDate
+  go
+#+end_src
+
+#+RESULTS:
+| FirstName | LastName  | Title                    |  BirthRate |
+|-----------+-----------+--------------------------+------------|
+| Margaret  | Peacock   | Sales Representative     | 19-09-1955 |
+| Nancy     | Davolio   | Sales Representative     | 08-12-1966 |
+| Andrew    | Fuller    | Vice President, Sales    | 19-02-1970 |
+| Steven    | Buchanan  | Sales Manager            | 04-03-1973 |
+| Laura     | Callahan  | Inside Sales Coordinator | 09-01-1976 |
+| Robert    | King      | Sales Representative     | 29-05-1978 |
+| Michael   | Suyama    | Sales Representative     | 02-07-1981 |
+| Janet     | Leverling | Sales Representative     | 30-08-1981 |
+| Anne      | Dodsworth | Sales Representative     | 27-01-1984 |
