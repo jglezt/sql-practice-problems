@@ -1,0 +1,1675 @@
+:PROPERTIES:
+:header-args:sql: :engine postgresql
+:header-args:sql+: :dbuser postgres
+:header-args:sql+: :dbpassword postgres
+:header-args:sql+: :database sql_problems
+:header-args:sql+: :dbhost 127.0.0.1
+:header-args:sql+: :dbport 5432
+:END:
+* DONE 1. Which shippers do we have?
+CLOSED: [2022-07-22 Fri 23:59]
+:LOGBOOK:
+- State "DONE"       from              [2022-07-22 Fri 23:59]
+:END:
+
+#+begin_src sql
+  SELECT * FROM shippers
+#+end_src
+
+#+RESULTS:
+| shipperid | companyname      | phone          |
+|-----------+------------------+----------------|
+|         1 | Speedy Express   | (503) 555-9831 |
+|         2 | United Package   | (503) 555-3199 |
+|         3 | Federal Shipping | (503) 555-9931 |
+
+* DONE 2. Certain fields from Categories
+CLOSED: [2022-07-23 Sat 00:01]
+:LOGBOOK:
+- State "DONE"       from              [2022-07-23 Sat 00:01]
+:END:
+
+#+begin_src sql
+  SELECT CategoryName, Description FROM Categories
+#+end_src
+
+#+RESULTS:
+| categoryname   | description                                                |
+|----------------+------------------------------------------------------------|
+| Beverages      | Soft drinks, coffees, teas, beers, and ales                |
+| Condiments     | Sweet and savory sauces, relishes, spreads, and seasonings |
+| Confections    | Desserts, candies, and sweet breads                        |
+| Dairy Products | Cheeses                                                    |
+| Grains/Cereals | Breads, crackers, pasta, and cereal                        |
+| Meat/Poultry   | Prepared meats                                             |
+| Produce        | Dried fruit and bean curd                                  |
+| Seafood        | Seaweed and fish                                           |
+* DONE 3. Sales Representatives
+CLOSED: [2022-07-23 Sat 00:05]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-07-23 Sat 00:05]
+- State "IN_PROGRESS" from "DONE"       [2022-07-23 Sat 00:02]
+- State "DONE"       from              [2022-07-23 Sat 00:01]
+:END:
+
+   * How does the sales representatives look like in the table
+
+#+begin_src sql
+  SELECT FirstName, LastName, HireDate
+  FROM Employees
+  WHERE title='Sales Representative'
+#+end_src
+
+#+RESULTS:
+| firstname | lastname  | hiredate            |
+|-----------+-----------+---------------------|
+| Nancy     | Davolio   | 2010-05-01 00:00:00 |
+| Janet     | Leverling | 2010-04-01 00:00:00 |
+| Margaret  | Peacock   | 2011-05-03 00:00:00 |
+| Michael   | Suyama    | 2011-10-17 00:00:00 |
+| Robert    | King      | 2012-01-02 00:00:00 |
+| Anne      | Dodsworth | 2012-11-15 00:00:00 |
+* DONE 4. Sales Representatives in the United States
+CLOSED: [2022-07-23 Sat 00:08]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-07-23 Sat 00:08]
+- State "IN_PROGRESS" from "IN_PROGRESS" [2022-07-23 Sat 00:06]
+:END:
+
+   * How does the unitated states look in the database
+
+#+begin_src sql
+  SELECT FirstName, LastName, HireDate
+  FROM Employees
+  WHERE title='Sales Representative' AND country='USA'
+#+end_src
+
+#+RESULTS:
+| firstname | lastname  | hiredate            |
+|-----------+-----------+---------------------|
+| Nancy     | Davolio   | 2010-05-01 00:00:00 |
+| Janet     | Leverling | 2010-04-01 00:00:00 |
+| Margaret  | Peacock   | 2011-05-03 00:00:00 |
+* DONE 5. Orders placed by specific EmployeeID
+CLOSED: [2022-07-23 Sat 00:11]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-07-23 Sat 00:11]
+- State "IN_PROGRESS" from "DONE"       [2022-07-23 Sat 00:08]
+:END:
+
+#+begin_src sql
+  SELECT OrderID, OrderDate
+  FROM orders
+  WHERE EmployeeID=5
+#+end_src
+
+#+RESULTS:
+| orderid | orderdate           |
+|---------+---------------------|
+|   10248 | 2014-07-04 08:00:00 |
+|   10254 | 2014-07-11 02:00:00 |
+|   10269 | 2014-07-31 00:00:00 |
+|   10297 | 2014-09-04 21:00:00 |
+|   10320 | 2014-10-03 12:00:00 |
+|   10333 | 2014-10-18 18:00:00 |
+|   10358 | 2014-11-20 05:00:00 |
+|   10359 | 2014-11-21 14:00:00 |
+|   10372 | 2014-12-04 10:00:00 |
+|   10378 | 2014-12-10 00:00:00 |
+|   10397 | 2014-12-27 17:00:00 |
+|   10463 | 2015-03-04 13:00:00 |
+|   10474 | 2015-03-13 16:00:00 |
+|   10477 | 2015-03-17 02:00:00 |
+|   10529 | 2015-05-07 01:00:00 |
+|   10549 | 2015-05-27 03:00:00 |
+|   10569 | 2015-06-16 15:00:00 |
+|   10575 | 2015-06-20 22:00:00 |
+|   10607 | 2015-07-22 09:00:00 |
+|   10648 | 2015-08-28 22:00:00 |
+|   10649 | 2015-08-28 00:00:00 |
+|   10650 | 2015-08-29 06:00:00 |
+|   10654 | 2015-09-02 07:00:00 |
+|   10675 | 2015-09-19 06:00:00 |
+|   10711 | 2015-10-21 03:00:00 |
+|   10714 | 2015-10-22 03:00:00 |
+|   10721 | 2015-10-29 08:00:00 |
+|   10730 | 2015-11-05 07:00:00 |
+|   10761 | 2015-12-02 08:00:00 |
+|   10812 | 2016-01-02 02:00:00 |
+|   10823 | 2016-01-09 17:00:00 |
+|   10841 | 2016-01-20 21:00:00 |
+|   10851 | 2016-01-26 00:00:00 |
+|   10866 | 2016-02-03 01:00:00 |
+|   10869 | 2016-02-04 09:00:00 |
+|   10870 | 2016-02-04 12:00:00 |
+|   10872 | 2016-02-05 06:00:00 |
+|   10874 | 2016-02-06 14:00:00 |
+|   10899 | 2016-02-20 09:00:00 |
+|   10922 | 2016-03-03 02:00:00 |
+|   10954 | 2016-03-17 16:00:00 |
+|   11043 | 2016-04-22 17:00:00 |
+* DONE 6. Suppliers and ContactTitles
+CLOSED: [2022-07-23 Sat 00:17]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-07-23 Sat 00:17]
+- State "IN_PROGRESS" from "DONE"       [2022-07-23 Sat 00:11]
+:END:
+
+#+begin_src sql
+  SELECT SupplierID, ContactName, ContactTitle
+  FROM suppliers
+  WHERE NOT ContactTitle='Marketing Manager' -- can be !=
+#+end_src
+
+#+RESULTS:
+| supplierid | contactname                | contacttitle                 |
+|------------+----------------------------+------------------------------|
+|          1 | Charlotte Cooper           | Purchasing Manager           |
+|          2 | Shelley Burke              | Order Administrator          |
+|          3 | Regina Murphy              | Sales Representative         |
+|          5 | Antonio del Valle Saavedra | Export Administrator         |
+|          6 | Mayumi Ohno                | Marketing Representative     |
+|          8 | Peter Wilson               | Sales Representative         |
+|          9 | Lars Peterson              | Sales Agent                  |
+|         11 | Petra Winkler              | Sales Manager                |
+|         12 | Martin Bein                | International Marketing Mgr. |
+|         13 | Sven Petersen              | Coordinator Foreign Markets  |
+|         14 | Elio Rossi                 | Sales Representative         |
+|         16 | Cheryl Saylor              | Regional Account Rep.        |
+|         17 | Michael BjÃrn            | Sales Representative         |
+|         18 | GuylÃ¿ne Nodier            | Sales Manager                |
+|         19 | Robb Merchant              | Wholesale Account Agent      |
+|         20 | Chandra Leka               | Owner                        |
+|         21 | Niels Petersen             | Sales Manager                |
+|         22 | Dirk Luchte                | Accounting Manager           |
+|         23 | Anne Heikkonen             | Product Manager              |
+|         24 | Wendy Mackenzie            | Sales Representative         |
+|         26 | Giovanni Giudici           | Order Administrator          |
+|         27 | Marie Delamare             | Sales Manager                |
+|         28 | Eliane Noz                 | Sales Representative         |
+|         29 | Chantal Goulet             | Accounting Manager           |
+* DONE 7. Products with "queso" in ProductName
+CLOSED: [2022-07-23 Sat 00:24]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-07-23 Sat 00:24]
+- State "IN_PROGRESS" from "IN_PROGRESS" [2022-07-23 Sat 00:18]
+:END:
+
+   * Upper for any case string comparision
+
+#+begin_src sql
+  SELECT ProductID, ProductName
+  FROM products
+  WHERE UPPER(ProductName) LIKE '%QUESO%'
+#+end_src
+
+#+RESULTS:
+| productid | productname               |
+|-----------+---------------------------|
+|        11 | Queso Cabrales            |
+|        12 | Queso Manchego La Pastora |
+* DONE 8. Orders shipping to France or Belgium
+CLOSED: [2022-07-23 Sat 00:26]
+
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-07-23 Sat 00:26]
+- State "IN_PROGRESS" from "DONE"       [2022-07-23 Sat 00:24]
+:END:
+
+   * Upper for any case string comparision
+
+#+begin_src sql
+  SELECT OrderID, CustomerID, ShipCountry
+  FROM orders
+  WHERE ShipCountry IN ('France', 'Belgium')
+#+end_src
+
+#+RESULTS:
+| orderid | customerid | shipcountry |
+|---------+------------+-------------|
+|   10248 | VINET      | France      |
+|   10251 | VICTE      | France      |
+|   10252 | SUPRD      | Belgium     |
+|   10265 | BLONP      | France      |
+|   10274 | VINET      | France      |
+|   10295 | VINET      | France      |
+|   10297 | BLONP      | France      |
+|   10302 | SUPRD      | Belgium     |
+|   10311 | DUMON      | France      |
+|   10331 | BONAP      | France      |
+|   10334 | VICTE      | France      |
+|   10340 | BONAP      | France      |
+|   10350 | LAMAI      | France      |
+|   10358 | LAMAI      | France      |
+|   10360 | BLONP      | France      |
+|   10362 | BONAP      | France      |
+|   10371 | LAMAI      | France      |
+|   10408 | FOLIG      | France      |
+|   10413 | LAMAI      | France      |
+|   10425 | LAMAI      | France      |
+|   10436 | BLONP      | France      |
+|   10449 | BLONP      | France      |
+|   10450 | VICTE      | France      |
+|   10454 | LAMAI      | France      |
+|   10458 | SUPRD      | Belgium     |
+|   10459 | VICTE      | France      |
+|   10463 | SUPRD      | Belgium     |
+|   10470 | BONAP      | France      |
+|   10475 | SUPRD      | Belgium     |
+|   10478 | VICTE      | France      |
+|   10480 | FOLIG      | France      |
+|   10493 | LAMAI      | France      |
+|   10500 | LAMAI      | France      |
+|   10511 | BONAP      | France      |
+|   10525 | BONAP      | France      |
+|   10529 | MAISD      | Belgium     |
+|   10546 | VICTE      | France      |
+|   10559 | BLONP      | France      |
+|   10566 | BLONP      | France      |
+|   10584 | BLONP      | France      |
+|   10609 | DUMON      | France      |
+|   10610 | LAMAI      | France      |
+|   10628 | BLONP      | France      |
+|   10631 | LAMAI      | France      |
+|   10634 | FOLIG      | France      |
+|   10649 | MAISD      | Belgium     |
+|   10663 | BONAP      | France      |
+|   10671 | FRANR      | France      |
+|   10679 | BLONP      | France      |
+|   10683 | DUMON      | France      |
+|   10715 | BONAP      | France      |
+|   10730 | BONAP      | France      |
+|   10732 | BONAP      | France      |
+|   10737 | VINET      | France      |
+|   10738 | SPECD      | France      |
+|   10739 | VINET      | France      |
+|   10755 | BONAP      | France      |
+|   10760 | MAISD      | Belgium     |
+|   10763 | FOLIG      | France      |
+|   10767 | SUPRD      | Belgium     |
+|   10787 | LAMAI      | France      |
+|   10789 | FOLIG      | France      |
+|   10806 | VICTE      | France      |
+|   10814 | VICTE      | France      |
+|   10826 | BLONP      | France      |
+|   10827 | BONAP      | France      |
+|   10832 | LAMAI      | France      |
+|   10841 | SUPRD      | Belgium     |
+|   10843 | VICTE      | France      |
+|   10846 | SUPRD      | Belgium     |
+|   10850 | VICTE      | France      |
+|   10858 | LACOR      | France      |
+|   10860 | FRANR      | France      |
+|   10871 | BONAP      | France      |
+|   10876 | BONAP      | France      |
+|   10885 | SUPRD      | Belgium     |
+|   10890 | DUMON      | France      |
+|   10892 | MAISD      | Belgium     |
+|   10896 | MAISD      | Belgium     |
+|   10907 | SPECD      | France      |
+|   10923 | LAMAI      | France      |
+|   10927 | LACOR      | France      |
+|   10930 | SUPRD      | Belgium     |
+|   10932 | BONAP      | France      |
+|   10940 | BONAP      | France      |
+|   10964 | SPECD      | France      |
+|   10971 | FRANR      | France      |
+|   10972 | LACOR      | France      |
+|   10973 | LACOR      | France      |
+|   10978 | MAISD      | Belgium     |
+|   11004 | MAISD      | Belgium     |
+|   11035 | SUPRD      | Belgium     |
+|   11038 | SUPRD      | Belgium     |
+|   11043 | SPECD      | France      |
+|   11051 | LAMAI      | France      |
+|   11076 | BONAP      | France      |
+* DONE 9. Order shipping to any country in Latin Aerica
+CLOSED: [2022-07-23 Sat 00:28]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-07-23 Sat 00:28]
+- State "IN_PROGRESS" from "DONE"       [2022-07-23 Sat 00:26]
+:END:
+
+#+begin_src sql
+  SELECT OrderID, CustomerID, ShipCountry
+  FROM orders
+  WHERE ShipCountry IN ('Mexico', 'Brazil', 'Argentina', 'Venezuela')
+#+end_src
+
+#+RESULTS:
+| orderid | customerid | shipcountry |
+|---------+------------+-------------|
+|   10250 | HANAR      | Brazil      |
+|   10253 | HANAR      | Brazil      |
+|   10256 | WELLI      | Brazil      |
+|   10257 | HILAA      | Venezuela   |
+|   10259 | CENTC      | Mexico      |
+|   10261 | QUEDE      | Brazil      |
+|   10268 | GROSR      | Venezuela   |
+|   10276 | TORTU      | Mexico      |
+|   10283 | LILAS      | Venezuela   |
+|   10287 | RICAR      | Brazil      |
+|   10290 | COMMI      | Brazil      |
+|   10291 | QUEDE      | Brazil      |
+|   10292 | TRADH      | Brazil      |
+|   10293 | TORTU      | Mexico      |
+|   10296 | LILAS      | Venezuela   |
+|   10299 | RICAR      | Brazil      |
+|   10304 | TORTU      | Mexico      |
+|   10308 | ANATR      | Mexico      |
+|   10319 | TORTU      | Mexico      |
+|   10322 | PERIC      | Mexico      |
+|   10330 | LILAS      | Venezuela   |
+|   10347 | FAMIA      | Brazil      |
+|   10354 | PERIC      | Mexico      |
+|   10357 | LILAS      | Venezuela   |
+|   10365 | ANTON      | Mexico      |
+|   10372 | QUEEN      | Brazil      |
+|   10379 | QUEDE      | Brazil      |
+|   10381 | LILAS      | Venezuela   |
+|   10386 | FAMIA      | Brazil      |
+|   10395 | HILAA      | Venezuela   |
+|   10405 | LINOD      | Venezuela   |
+|   10406 | QUEEN      | Brazil      |
+|   10409 | OCEAN      | Argentina   |
+|   10414 | FAMIA      | Brazil      |
+|   10420 | WELLI      | Brazil      |
+|   10421 | QUEDE      | Brazil      |
+|   10423 | GOURL      | Brazil      |
+|   10447 | RICAR      | Brazil      |
+|   10448 | RANCH      | Argentina   |
+|   10461 | LILAS      | Venezuela   |
+|   10466 | COMMI      | Brazil      |
+|   10474 | PERIC      | Mexico      |
+|   10476 | HILAA      | Venezuela   |
+|   10481 | RICAR      | Brazil      |
+|   10485 | LINOD      | Venezuela   |
+|   10486 | HILAA      | Venezuela   |
+|   10487 | QUEEN      | Brazil      |
+|   10490 | HILAA      | Venezuela   |
+|   10494 | COMMI      | Brazil      |
+|   10496 | TRADH      | Brazil      |
+|   10498 | HILAA      | Venezuela   |
+|   10499 | LILAS      | Venezuela   |
+|   10502 | PERIC      | Mexico      |
+|   10507 | ANTON      | Mexico      |
+|   10512 | FAMIA      | Brazil      |
+|   10518 | TORTU      | Mexico      |
+|   10521 | CACTU      | Argentina   |
+|   10531 | OCEAN      | Argentina   |
+|   10535 | ANTON      | Mexico      |
+|   10541 | HANAR      | Brazil      |
+|   10543 | LILAS      | Venezuela   |
+|   10552 | HILAA      | Venezuela   |
+|   10563 | RICAR      | Brazil      |
+|   10573 | ANTON      | Mexico      |
+|   10576 | TORTU      | Mexico      |
+|   10581 | FAMIA      | Brazil      |
+|   10585 | WELLI      | Brazil      |
+|   10587 | QUEDE      | Brazil      |
+|   10601 | HILAA      | Venezuela   |
+|   10606 | TRADH      | Brazil      |
+|   10613 | HILAA      | Venezuela   |
+|   10622 | RICAR      | Brazil      |
+|   10625 | ANATR      | Mexico      |
+|   10637 | QUEEN      | Brazil      |
+|   10638 | LINOD      | Venezuela   |
+|   10641 | HILAA      | Venezuela   |
+|   10644 | WELLI      | Brazil      |
+|   10645 | HANAR      | Brazil      |
+|   10647 | QUEDE      | Brazil      |
+|   10648 | RICAR      | Brazil      |
+|   10650 | FAMIA      | Brazil      |
+|   10652 | GOURL      | Brazil      |
+|   10659 | QUEEN      | Brazil      |
+|   10676 | TORTU      | Mexico      |
+|   10677 | ANTON      | Mexico      |
+|   10682 | ANTON      | Mexico      |
+|   10685 | GOURL      | Brazil      |
+|   10690 | HANAR      | Brazil      |
+|   10697 | LINOD      | Venezuela   |
+|   10704 | QUEEN      | Brazil      |
+|   10705 | HILAA      | Venezuela   |
+|   10709 | GOURL      | Brazil      |
+|   10716 | RANCH      | Argentina   |
+|   10720 | QUEDE      | Brazil      |
+|   10725 | FAMIA      | Brazil      |
+|   10728 | QUEEN      | Brazil      |
+|   10729 | LINOD      | Venezuela   |
+|   10734 | GOURL      | Brazil      |
+|   10759 | ANATR      | Mexico      |
+|   10770 | HANAR      | Brazil      |
+|   10777 | GOURL      | Brazil      |
+|   10780 | LILAS      | Venezuela   |
+|   10782 | CACTU      | Argentina   |
+|   10783 | HANAR      | Brazil      |
+|   10785 | GROSR      | Venezuela   |
+|   10786 | QUEEN      | Brazil      |
+|   10790 | GOURL      | Brazil      |
+|   10794 | QUEDE      | Brazil      |
+|   10796 | HILAA      | Venezuela   |
+|   10803 | WELLI      | Brazil      |
+|   10809 | WELLI      | Brazil      |
+|   10811 | LINOD      | Venezuela   |
+|   10813 | RICAR      | Brazil      |
+|   10819 | CACTU      | Argentina   |
+|   10823 | LILAS      | Venezuela   |
+|   10828 | RANCH      | Argentina   |
+|   10830 | TRADH      | Brazil      |
+|   10834 | TRADH      | Brazil      |
+|   10838 | LINOD      | Venezuela   |
+|   10839 | TRADH      | Brazil      |
+|   10840 | LINOD      | Venezuela   |
+|   10842 | TORTU      | Mexico      |
+|   10851 | RICAR      | Brazil      |
+|   10856 | ANTON      | Mexico      |
+|   10863 | HILAA      | Venezuela   |
+|   10868 | QUEEN      | Brazil      |
+|   10877 | RICAR      | Brazil      |
+|   10881 | CACTU      | Argentina   |
+|   10886 | HANAR      | Brazil      |
+|   10898 | OCEAN      | Argentina   |
+|   10899 | LILAS      | Venezuela   |
+|   10900 | WELLI      | Brazil      |
+|   10901 | HILAA      | Venezuela   |
+|   10903 | HANAR      | Brazil      |
+|   10905 | WELLI      | Brazil      |
+|   10913 | QUEEN      | Brazil      |
+|   10914 | QUEEN      | Brazil      |
+|   10915 | TORTU      | Mexico      |
+|   10916 | RANCH      | Argentina   |
+|   10919 | LINOD      | Venezuela   |
+|   10922 | HANAR      | Brazil      |
+|   10925 | HANAR      | Brazil      |
+|   10926 | ANATR      | Mexico      |
+|   10935 | WELLI      | Brazil      |
+|   10937 | CACTU      | Argentina   |
+|   10954 | LINOD      | Venezuela   |
+|   10957 | HILAA      | Venezuela   |
+|   10958 | OCEAN      | Argentina   |
+|   10959 | GOURL      | Brazil      |
+|   10960 | HILAA      | Venezuela   |
+|   10961 | QUEEN      | Brazil      |
+|   10969 | COMMI      | Brazil      |
+|   10976 | HILAA      | Venezuela   |
+|   10981 | HANAR      | Brazil      |
+|   10986 | OCEAN      | Argentina   |
+|   10989 | QUEDE      | Brazil      |
+|   10995 | PERIC      | Mexico      |
+|   10997 | LILAS      | Venezuela   |
+|   11014 | LINOD      | Venezuela   |
+|   11019 | RANCH      | Argentina   |
+|   11022 | HANAR      | Brazil      |
+|   11039 | LINOD      | Venezuela   |
+|   11042 | COMMI      | Brazil      |
+|   11049 | GOURL      | Brazil      |
+|   11052 | HANAR      | Brazil      |
+|   11054 | CACTU      | Argentina   |
+|   11055 | HILAA      | Venezuela   |
+|   11059 | RICAR      | Brazil      |
+|   11065 | LILAS      | Venezuela   |
+|   11068 | QUEEN      | Brazil      |
+|   11069 | TORTU      | Mexico      |
+|   11071 | LILAS      | Venezuela   |
+|   11073 | PERIC      | Mexico      |
+* DONE 10. Employees, in order of age
+CLOSED: [2022-07-23 Sat 00:30]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-07-23 Sat 00:30]
+- State "IN_PROGRESS" from "DONE"       [2022-07-23 Sat 00:28]
+:END:
+
+#+begin_src sql
+  SELECT FirstName, LastName, Title, BirthDate
+  FROM employees
+  ORDER BY BirthDate
+#+end_src
+
+#+RESULTS:
+| firstname | lastname  | title                    | birthdate           |
+|-----------+-----------+--------------------------+---------------------|
+| Margaret  | Peacock   | Sales Representative     | 1955-09-19 00:00:00 |
+| Nancy     | Davolio   | Sales Representative     | 1966-12-08 00:00:00 |
+| Andrew    | Fuller    | Vice President, Sales    | 1970-02-19 00:00:00 |
+| Steven    | Buchanan  | Sales Manager            | 1973-03-04 00:00:00 |
+| Laura     | Callahan  | Inside Sales Coordinator | 1976-01-09 00:00:00 |
+| Robert    | King      | Sales Representative     | 1978-05-29 00:00:00 |
+| Michael   | Suyama    | Sales Representative     | 1981-07-02 00:00:00 |
+| Janet     | Leverling | Sales Representative     | 1981-08-30 00:00:00 |
+| Anne      | Dodsworth | Sales Representative     | 1984-01-27 00:00:00 |
+* DONE 11. Showing only the Date with a DateTime field
+CLOSED: [2022-07-23 Sat 00:47]
+:LOGBOOK:
+- State "DONE"       from "DONE"       [2022-11-26 sáb 01:06]
+- State "DONE"       from "IN_PROGRESS" [2022-07-23 Sat 00:47]
+- State "IN_PROGRESS" from "DONE"       [2022-07-23 Sat 00:30]
+:END:
+
+  * The convert function takes the type of origin (use varchar so that
+    the format is applied) and the format code, which in this case is 105
+    YYYY-MM-DD
+  * =TO_DATE= function is to change an str to a =DATE= type
+
+#+begin_src sql
+  SELECT FirstName, LastName, Title, CAST(BirthDate AS DATE)
+  AS BirthRate
+  FROM employees
+  ORDER BY BirthDate
+#+end_src
+
+#+RESULTS:
+| firstname | lastname  | title                    |  birthrate |
+|-----------+-----------+--------------------------+------------|
+| Margaret  | Peacock   | Sales Representative     | 1955-09-19 |
+| Nancy     | Davolio   | Sales Representative     | 1966-12-08 |
+| Andrew    | Fuller    | Vice President, Sales    | 1970-02-19 |
+| Steven    | Buchanan  | Sales Manager            | 1973-03-04 |
+| Laura     | Callahan  | Inside Sales Coordinator | 1976-01-09 |
+| Robert    | King      | Sales Representative     | 1978-05-29 |
+| Michael   | Suyama    | Sales Representative     | 1981-07-02 |
+| Janet     | Leverling | Sales Representative     | 1981-08-30 |
+| Anne      | Dodsworth | Sales Representative     | 1984-01-27 |
+
+* DONE 12. Employees full name
+CLOSED: [2022-11-26 sáb 01:09]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2022-11-26 sáb 01:09]
+- State "TODO"       from              [2022-11-26 sáb 01:06]
+:END:
+   * Concat can take multiple arguments
+#+begin_src sql
+  SELECT FirstName, LastName, CONCAT(FirstName, ' ', LastName) as FullName FROM employees
+#+end_src
+
+#+RESULTS:
+| firstname | lastname  | fullname         |
+|-----------+-----------+------------------|
+| Andrew    | Fuller    | Andrew Fuller    |
+| Nancy     | Davolio   | Nancy Davolio    |
+| Janet     | Leverling | Janet Leverling  |
+| Margaret  | Peacock   | Margaret Peacock |
+| Steven    | Buchanan  | Steven Buchanan  |
+| Michael   | Suyama    | Michael Suyama   |
+| Robert    | King      | Robert King      |
+| Laura     | Callahan  | Laura Callahan   |
+| Anne      | Dodsworth | Anne Dodsworth   |
+
+* DONE 13. OrderDetails amount per line item
+CLOSED: [2022-11-26 sáb 01:14]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-26 sáb 01:14]
+- State "IN_PROGRESS" from              [2022-11-26 sáb 01:10]
+:END:
+
+   * Use LIMIT to evaluate the block code in org babel
+
+#+begin_src sql
+  SELECT OrderID, ProductID, UnitPrice, Quantity, Quantity * UnitPrice as TotalPrice  FROM OrderDetails LIMIT 22
+#+end_src
+
+#+RESULTS:
+| orderid | productid | unitprice | quantity | totalprice |
+|---------+-----------+-----------+----------+------------|
+|   10248 |        11 | $14.00    |       12 | $168.00    |
+|   10248 |        42 | $9.80     |       10 | $98.00     |
+|   10248 |        72 | $34.80    |        5 | $174.00    |
+|   10249 |        14 | $18.60    |        9 | $167.40    |
+|   10249 |        51 | $42.40    |       40 | $1,696.00  |
+|   10250 |        41 | $7.70     |       10 | $77.00     |
+|   10250 |        51 | $42.40    |       35 | $1,484.00  |
+|   10250 |        65 | $16.80    |       15 | $252.00    |
+|   10251 |        22 | $16.80    |        6 | $100.80    |
+|   10251 |        57 | $15.60    |       15 | $234.00    |
+|   10251 |        65 | $16.80    |       20 | $336.00    |
+|   10252 |        20 | $64.80    |       40 | $2,592.00  |
+|   10252 |        33 | $2.00     |       25 | $50.00     |
+|   10252 |        60 | $27.20    |       40 | $1,088.00  |
+|   10253 |        31 | $10.00    |       20 | $200.00    |
+|   10253 |        39 | $14.40    |       42 | $604.80    |
+|   10253 |        49 | $16.00    |       40 | $640.00    |
+|   10254 |        24 | $3.60     |       15 | $54.00     |
+|   10254 |        55 | $19.20    |       21 | $403.20    |
+|   10254 |        74 | $8.00     |       21 | $168.00    |
+|   10255 |         2 | $15.20    |       20 | $304.00    |
+|   10255 |        16 | $13.90    |       35 | $486.50    |
+
+* DONE 14. How many users
+CLOSED: [2022-11-26 sáb 01:16]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-26 sáb 01:16]
+- State "IN_PROGRESS" from              [2022-11-26 sáb 01:15]
+:END:
+
+    * Count is an =aggregate function=
+#+begin_src sql
+  SELECT COUNT(*) as TotalCustomers FROM Customers
+#+end_src
+
+#+RESULTS:
+| totalcustomers |
+|----------------|
+|             91 |
+
+* DONE 15. When was the first order
+CLOSED: [2022-11-26 sáb 01:19]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-26 sáb 01:19]
+- State "IN_PROGRESS" from "TODO"       [2022-11-26 sáb 01:16]
+- State "TODO"       from              [2022-11-26 sáb 01:16]
+:END:
+
+   * There is a second, more expensive solution by ordering the query by dates. After that, we can simply return the first line with
+     LIMIT
+
+#+begin_src sql
+  SELECT MIN(OrderDate) as FirstOrder FROM Orders
+#+end_src
+
+#+RESULTS:
+| min                 |
+|---------------------|
+| 2014-07-04 08:00:00 |
+
+* DONE 16. Countries where there are customers
+CLOSED: [2022-11-26 sáb 01:27]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-26 sáb 01:27]
+- State "IN_PROGRESS" from              [2022-11-26 sáb 01:19]
+:END:
+
+   * Can also be solved using the distinct keyword
+
+#+begin_src sql
+  SELECT Country FROM Customers GROUP BY Country ORDER BY Country
+#+end_src
+
+#+RESULTS:
+| country     |
+|-------------|
+| Argentina   |
+| Austria     |
+| Belgium     |
+| Brazil      |
+| Canada      |
+| Denmark     |
+| Finland     |
+| France      |
+| Germany     |
+| Ireland     |
+| Italy       |
+| Mexico      |
+| Norway      |
+| Poland      |
+| Portugal    |
+| Spain       |
+| Sweden      |
+| Switzerland |
+| UK          |
+| USA         |
+| Venezuela   |
+
+* DONE 17. Contact titles for customers
+CLOSED: [2022-11-26 sáb 01:30]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-26 sáb 01:30]
+- State "IN_PROGRESS" from              [2022-11-26 sáb 01:27]
+:END:
+
+#+begin_src sql
+  SELECT ContactTitle, COUNT(*) AS TotalContactTitle FROM Customers GROUP BY ContactTitle
+#+end_src
+
+#+RESULTS:
+| contacttitle                   | totalcontacttitle |
+|--------------------------------+-------------------|
+| Sales Manager                  |                11 |
+| Owner                          |                17 |
+| Owner/Marketing Assistant      |                 1 |
+| Accounting Manager             |                10 |
+| Sales Associate                |                 7 |
+| Sales Agent                    |                 5 |
+| Assistant Sales Agent          |                 2 |
+| Assistant Sales Representative |                 1 |
+| Order Administrator            |                 2 |
+| Marketing Manager              |                12 |
+| Sales Representative           |                17 |
+| Marketing Assistant            |                 6 |
+
+* DONE 18. Products with associated suplier names
+CLOSED: [2022-11-26 sáb 01:33]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-26 sáb 01:33]
+- State "IN_PROGRESS" from              [2022-11-26 sáb 01:30]
+:END:
+
+#+begin_src sql
+  SELECT ProductID, ProductName, CompanyName AS Supplier FROM Products AS P JOIN Suppliers AS S ON P.SupplierID=S.SupplierID ORDER BY ProductID
+#+end_src
+
+#+RESULTS:
+| productid | productname                          | supplier                               |
+|-----------+--------------------------------------+----------------------------------------|
+|         1 | Chai                                 | Exotic Liquids                         |
+|         2 | Chang                                | Exotic Liquids                         |
+|         3 | Aniseed Syrup                        | Exotic Liquids                         |
+|         4 | Chef Anton's Cajun Seasoning         | New Orleans Cajun Delights             |
+|         5 | Chef Anton's Gumbo Mix               | New Orleans Cajun Delights             |
+|         6 | Grandma's Boysenberry Spread         | Grandma Kelly's Homestead              |
+|         7 | Uncle Bob's Organic Dried Pears      | Grandma Kelly's Homestead              |
+|         8 | Northwoods Cranberry Sauce           | Grandma Kelly's Homestead              |
+|         9 | Mishi Kobe Niku                      | Tokyo Traders                          |
+|        10 | Ikura                                | Tokyo Traders                          |
+|        11 | Queso Cabrales                       | Cooperativa de Quesos 'Las Cabras'     |
+|        12 | Queso Manchego La Pastora            | Cooperativa de Quesos 'Las Cabras'     |
+|        13 | Konbu                                | Mayumi's                               |
+|        14 | Tofu                                 | Mayumi's                               |
+|        15 | Genen Shouyu                         | Mayumi's                               |
+|        16 | Pavlova                              | Pavlova, Ltd.                          |
+|        17 | Alice Mutton                         | Pavlova, Ltd.                          |
+|        18 | Carnarvon Tigers                     | Pavlova, Ltd.                          |
+|        19 | Teatime Chocolate Biscuits           | Specialty Biscuits, Ltd.               |
+|        20 | Sir Rodney's Marmalade               | Specialty Biscuits, Ltd.               |
+|        21 | Sir Rodney's Scones                  | Specialty Biscuits, Ltd.               |
+|        22 | Gustaf's KnÃñckebrÃd               | PB KnÃñckebrÃd AB                    |
+|        23 | TunnbrÃd                           | PB KnÃñckebrÃd AB                    |
+|        24 | GuaranÃí FantÃística                 | Refrescos Americanas LTDA              |
+|        25 | NuNuCa NuÃ-Nougat-Creme          | Heli SÃ¦Ãwaren GmbH & Co. KG       |
+|        26 | GumbÃñr GummibÃñrchen                | Heli SÃ¦Ãwaren GmbH & Co. KG       |
+|        27 | Schoggi Schokolade                   | Heli SÃ¦Ãwaren GmbH & Co. KG       |
+|        28 | RÃssle Sauerkraut                  | Plutzer LebensmittelgroÃmÃñrkte AG |
+|        29 | ThÃ¦ringer Rostbratwurst             | Plutzer LebensmittelgroÃmÃñrkte AG |
+|        30 | Nord-Ost Matjeshering                | Nord-Ost-Fisch Handelsgesellschaft mbH |
+|        31 | Gorgonzola Telino                    | Formaggi Fortini s.r.l.                |
+|        32 | Mascarpone Fabioli                   | Formaggi Fortini s.r.l.                |
+|        33 | Geitost                              | Norske Meierier                        |
+|        34 | Sasquatch Ale                        | Bigfoot Breweries                      |
+|        35 | Steeleye Stout                       | Bigfoot Breweries                      |
+|        36 | Inlagd Sill                          | Svensk SjÃfÃda AB                  |
+|        37 | Gravad lax                           | Svensk SjÃfÃda AB                  |
+|        38 | CÃ´te de Blaye                       | Aux joyeux ecclÃ©siastiques            |
+|        39 | Chartreuse verte                     | Aux joyeux ecclÃ©siastiques            |
+|        40 | Boston Crab Meat                     | New England Seafood Cannery            |
+|        41 | Jack's New England Clam Chowder      | New England Seafood Cannery            |
+|        42 | Singaporean Hokkien Fried Mee        | Leka Trading                           |
+|        43 | Ipoh Coffee                          | Leka Trading                           |
+|        44 | Gula Malacca                         | Leka Trading                           |
+|        45 | Rogede sild                          | Lyngbysild                             |
+|        46 | Spegesild                            | Lyngbysild                             |
+|        47 | Zaanse koeken                        | Zaanse Snoepfabriek                    |
+|        48 | Chocolade                            | Zaanse Snoepfabriek                    |
+|        49 | Maxilaku                             | Karkki Oy                              |
+|        50 | Valkoinen suklaa                     | Karkki Oy                              |
+|        51 | Manjimup Dried Apples                | G'day, Mate                            |
+|        52 | Filo Mix                             | G'day, Mate                            |
+|        53 | Perth Pasties                        | G'day, Mate                            |
+|        54 | TourtiÃ¿re                           | Ma Maison                              |
+|        55 | PÃótÃ© chinois                       | Ma Maison                              |
+|        56 | Gnocchi di nonna Alice               | Pasta Buttini s.r.l.                   |
+|        57 | Ravioli Angelo                       | Pasta Buttini s.r.l.                   |
+|        58 | Escargots de Bourgogne               | Escargots Nouveaux                     |
+|        59 | Raclette Courdavault                 | Gai pÃóturage                          |
+|        60 | Camembert Pierrot                    | Gai pÃóturage                          |
+|        61 | Sirop d'Ã©rable                      | ForÃ¬ts d'Ã©rables                     |
+|        62 | Tarte au sucre                       | ForÃ¬ts d'Ã©rables                     |
+|        63 | Vegie-spread                         | Pavlova, Ltd.                          |
+|        64 | Wimmers gute SemmelknÃdel          | Plutzer LebensmittelgroÃmÃñrkte AG |
+|        65 | Louisiana Fiery Hot Pepper Sauce     | New Orleans Cajun Delights             |
+|        66 | Louisiana Hot Spiced Okra            | New Orleans Cajun Delights             |
+|        67 | Laughing Lumberjack Lager            | Bigfoot Breweries                      |
+|        68 | Scottish Longbreads                  | Specialty Biscuits, Ltd.               |
+|        69 | Gudbrandsdalsost                     | Norske Meierier                        |
+|        70 | Outback Lager                        | Pavlova, Ltd.                          |
+|        71 | Flotemysost                          | Norske Meierier                        |
+|        72 | Mozzarella di Giovanni               | Formaggi Fortini s.r.l.                |
+|        73 | RÃd Kaviar                         | Svensk SjÃfÃda AB                  |
+|        74 | Longlife Tofu                        | Tokyo Traders                          |
+|        75 | RhÃnbrÃñu Klosterbier              | Plutzer LebensmittelgroÃmÃñrkte AG |
+|        76 | LakkalikÃÃri                     | Karkki Oy                              |
+|        77 | Original Frankfurter grÃ¦ne SoÃe | Plutzer LebensmittelgroÃmÃñrkte AG |
+
+* DONE 19. Orders and the Shipper that was used
+CLOSED: [2022-11-26 sáb 01:41]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-26 sáb 01:41]
+- State "IN_PROGRESS" from              [2022-11-26 sáb 01:33]
+:END:
+
+   * Note: The joining id not always the same accross tables
+#+begin_src sql
+  SELECT OrderID, CAST(OrderDate AS DATE) AS OrderDate, CompanyName AS Shipper
+  FROM Orders AS O JOIN Shippers AS S ON O.ShipVia=S.ShipperID WHERE OrderID > 1270
+#+end_src
+
+#+RESULTS:
+| orderid |  orderdate | shipper          |
+|---------+------------+------------------|
+|   10248 | 2014-07-04 | Federal Shipping |
+|   10249 | 2014-07-05 | Speedy Express   |
+|   10250 | 2014-07-08 | United Package   |
+|   10251 | 2014-07-08 | Speedy Express   |
+|   10252 | 2014-07-09 | United Package   |
+|   10253 | 2014-07-10 | United Package   |
+|   10254 | 2014-07-11 | United Package   |
+|   10255 | 2014-07-12 | Federal Shipping |
+|   10256 | 2014-07-15 | United Package   |
+|   10257 | 2014-07-16 | Federal Shipping |
+|   10258 | 2014-07-17 | Speedy Express   |
+|   10259 | 2014-07-18 | Federal Shipping |
+|   10260 | 2014-07-19 | Speedy Express   |
+|   10261 | 2014-07-19 | United Package   |
+|   10262 | 2014-07-22 | Federal Shipping |
+|   10263 | 2014-07-23 | Federal Shipping |
+|   10264 | 2014-07-24 | Federal Shipping |
+|   10265 | 2014-07-25 | Speedy Express   |
+|   10266 | 2014-07-26 | Federal Shipping |
+|   10267 | 2014-07-29 | Speedy Express   |
+|   10268 | 2014-07-30 | Federal Shipping |
+|   10269 | 2014-07-31 | Speedy Express   |
+|   10270 | 2014-08-01 | Speedy Express   |
+|   10271 | 2014-08-01 | United Package   |
+|   10272 | 2014-08-02 | United Package   |
+|   10273 | 2014-08-05 | Federal Shipping |
+|   10274 | 2014-08-06 | Speedy Express   |
+|   10275 | 2014-08-07 | Speedy Express   |
+|   10276 | 2014-08-08 | Federal Shipping |
+|   10277 | 2014-08-09 | Federal Shipping |
+|   10278 | 2014-08-12 | United Package   |
+|   10279 | 2014-08-13 | United Package   |
+|   10280 | 2014-08-14 | Speedy Express   |
+|   10281 | 2014-08-14 | Speedy Express   |
+|   10282 | 2014-08-15 | Speedy Express   |
+|   10283 | 2014-08-16 | Federal Shipping |
+|   10284 | 2014-08-19 | Speedy Express   |
+|   10285 | 2014-08-20 | United Package   |
+|   10286 | 2014-08-21 | Federal Shipping |
+|   10287 | 2014-08-22 | Federal Shipping |
+|   10288 | 2014-08-23 | Speedy Express   |
+|   10289 | 2014-08-26 | Federal Shipping |
+|   10290 | 2014-08-27 | Speedy Express   |
+|   10291 | 2014-08-27 | United Package   |
+|   10292 | 2014-08-28 | United Package   |
+|   10293 | 2014-08-29 | Federal Shipping |
+|   10294 | 2014-08-30 | United Package   |
+|   10295 | 2014-09-02 | United Package   |
+|   10296 | 2014-09-03 | Speedy Express   |
+|   10297 | 2014-09-04 | United Package   |
+|   10298 | 2014-09-05 | United Package   |
+|   10299 | 2014-09-06 | United Package   |
+|   10300 | 2014-09-09 | United Package   |
+|   10301 | 2014-09-09 | United Package   |
+|   10302 | 2014-09-10 | United Package   |
+|   10303 | 2014-09-11 | United Package   |
+|   10304 | 2014-09-12 | United Package   |
+|   10305 | 2014-09-13 | Federal Shipping |
+|   10306 | 2014-09-16 | Federal Shipping |
+|   10307 | 2014-09-17 | United Package   |
+|   10308 | 2014-09-18 | Federal Shipping |
+|   10309 | 2014-09-19 | Speedy Express   |
+|   10310 | 2014-09-20 | United Package   |
+|   10311 | 2014-09-20 | Federal Shipping |
+|   10312 | 2014-09-23 | United Package   |
+|   10313 | 2014-09-24 | United Package   |
+|   10314 | 2014-09-25 | United Package   |
+|   10315 | 2014-09-26 | United Package   |
+|   10316 | 2014-09-27 | Federal Shipping |
+|   10317 | 2014-09-30 | Speedy Express   |
+|   10318 | 2014-10-01 | United Package   |
+|   10319 | 2014-10-02 | Federal Shipping |
+|   10320 | 2014-10-03 | Federal Shipping |
+|   10321 | 2014-10-03 | United Package   |
+|   10322 | 2014-10-04 | Federal Shipping |
+|   10323 | 2014-10-07 | Speedy Express   |
+|   10324 | 2014-10-08 | Speedy Express   |
+|   10325 | 2014-10-09 | Federal Shipping |
+|   10326 | 2014-10-10 | United Package   |
+|   10327 | 2014-10-11 | Speedy Express   |
+|   10328 | 2014-10-14 | Federal Shipping |
+|   10329 | 2014-10-15 | United Package   |
+|   10330 | 2014-10-16 | Speedy Express   |
+|   10331 | 2014-10-16 | Speedy Express   |
+|   10332 | 2014-10-17 | United Package   |
+|   10333 | 2014-10-18 | Federal Shipping |
+|   10334 | 2014-10-21 | United Package   |
+|   10335 | 2014-10-22 | United Package   |
+|   10336 | 2014-10-23 | United Package   |
+|   10337 | 2014-10-24 | Federal Shipping |
+|   10338 | 2014-10-25 | Federal Shipping |
+|   10339 | 2014-10-28 | United Package   |
+|   10340 | 2014-10-29 | Federal Shipping |
+|   10341 | 2014-10-29 | Federal Shipping |
+|   10342 | 2014-10-30 | United Package   |
+|   10343 | 2014-10-31 | Speedy Express   |
+|   10344 | 2014-11-01 | United Package   |
+|   10345 | 2014-11-04 | United Package   |
+|   10346 | 2014-11-05 | Federal Shipping |
+|   10347 | 2014-11-06 | Federal Shipping |
+|   10348 | 2014-11-07 | United Package   |
+|   10349 | 2014-11-08 | Speedy Express   |
+|   10350 | 2014-11-11 | United Package   |
+|   10351 | 2014-11-11 | Speedy Express   |
+|   10352 | 2014-11-12 | Federal Shipping |
+|   10353 | 2014-11-13 | Federal Shipping |
+|   10354 | 2014-11-14 | Federal Shipping |
+|   10355 | 2014-11-15 | Speedy Express   |
+|   10356 | 2014-11-18 | United Package   |
+|   10357 | 2014-11-19 | Federal Shipping |
+|   10358 | 2014-11-20 | Speedy Express   |
+|   10359 | 2014-11-21 | Federal Shipping |
+|   10360 | 2014-11-22 | Federal Shipping |
+|   10361 | 2014-11-22 | United Package   |
+|   10362 | 2014-11-25 | Speedy Express   |
+|   10363 | 2014-11-26 | Federal Shipping |
+|   10364 | 2014-11-26 | Speedy Express   |
+|   10365 | 2014-11-27 | United Package   |
+|   10366 | 2014-11-28 | United Package   |
+|   10367 | 2014-11-28 | Federal Shipping |
+|   10368 | 2014-11-29 | United Package   |
+|   10369 | 2014-12-02 | United Package   |
+|   10370 | 2014-12-03 | United Package   |
+|   10371 | 2014-12-03 | Speedy Express   |
+|   10372 | 2014-12-04 | United Package   |
+|   10373 | 2014-12-05 | Federal Shipping |
+|   10374 | 2014-12-05 | Federal Shipping |
+|   10375 | 2014-12-06 | United Package   |
+|   10376 | 2014-12-09 | United Package   |
+|   10377 | 2014-12-09 | Federal Shipping |
+|   10378 | 2014-12-10 | Federal Shipping |
+|   10379 | 2014-12-11 | Speedy Express   |
+|   10380 | 2014-12-12 | Federal Shipping |
+|   10381 | 2014-12-12 | Federal Shipping |
+|   10382 | 2014-12-13 | Speedy Express   |
+|   10383 | 2014-12-16 | Federal Shipping |
+|   10384 | 2014-12-16 | Federal Shipping |
+|   10385 | 2014-12-17 | United Package   |
+|   10386 | 2014-12-18 | Federal Shipping |
+|   10387 | 2014-12-18 | United Package   |
+|   10388 | 2014-12-19 | Speedy Express   |
+|   10389 | 2014-12-20 | United Package   |
+|   10390 | 2014-12-23 | Speedy Express   |
+|   10391 | 2014-12-23 | Federal Shipping |
+|   10392 | 2014-12-24 | Federal Shipping |
+|   10393 | 2014-12-25 | Federal Shipping |
+|   10394 | 2014-12-25 | Federal Shipping |
+|   10395 | 2014-12-26 | Speedy Express   |
+|   10396 | 2014-12-27 | Federal Shipping |
+|   10397 | 2014-12-27 | Speedy Express   |
+|   10398 | 2014-12-30 | Federal Shipping |
+|   10399 | 2014-12-31 | Federal Shipping |
+|   10400 | 2015-01-01 | Federal Shipping |
+|   10401 | 2015-01-01 | Speedy Express   |
+|   10402 | 2015-01-02 | United Package   |
+|   10403 | 2015-01-03 | Federal Shipping |
+|   10404 | 2015-01-03 | Speedy Express   |
+|   10405 | 2015-01-06 | Speedy Express   |
+|   10406 | 2015-01-07 | Speedy Express   |
+|   10407 | 2015-01-07 | United Package   |
+|   10408 | 2015-01-08 | Speedy Express   |
+|   10409 | 2015-01-09 | Speedy Express   |
+|   10410 | 2015-01-10 | Federal Shipping |
+|   10411 | 2015-01-10 | Federal Shipping |
+|   10412 | 2015-01-13 | United Package   |
+|   10413 | 2015-01-14 | United Package   |
+|   10414 | 2015-01-14 | Federal Shipping |
+|   10415 | 2015-01-15 | Speedy Express   |
+|   10416 | 2015-01-16 | Federal Shipping |
+|   10417 | 2015-01-16 | Federal Shipping |
+|   10418 | 2015-01-17 | Speedy Express   |
+|   10419 | 2015-01-20 | United Package   |
+|   10420 | 2015-01-21 | Speedy Express   |
+|   10421 | 2015-01-21 | Speedy Express   |
+|   10422 | 2015-01-22 | Speedy Express   |
+|   10423 | 2015-01-23 | Federal Shipping |
+|   10424 | 2015-01-23 | United Package   |
+|   10425 | 2015-01-24 | United Package   |
+|   10426 | 2015-01-27 | Speedy Express   |
+|   10427 | 2015-01-27 | United Package   |
+|   10428 | 2015-01-28 | Speedy Express   |
+|   10429 | 2015-01-29 | United Package   |
+|   10430 | 2015-01-30 | Speedy Express   |
+|   10431 | 2015-01-30 | United Package   |
+|   10432 | 2015-01-31 | United Package   |
+|   10433 | 2015-02-03 | Federal Shipping |
+|   10434 | 2015-02-03 | United Package   |
+|   10435 | 2015-02-04 | United Package   |
+|   10436 | 2015-02-05 | United Package   |
+|   10437 | 2015-02-05 | Speedy Express   |
+|   10438 | 2015-02-06 | United Package   |
+|   10439 | 2015-02-07 | Federal Shipping |
+|   10440 | 2015-02-10 | United Package   |
+|   10441 | 2015-02-10 | United Package   |
+|   10442 | 2015-02-11 | United Package   |
+|   10443 | 2015-02-12 | Speedy Express   |
+|   10444 | 2015-02-12 | Federal Shipping |
+|   10445 | 2015-02-13 | Speedy Express   |
+|   10446 | 2015-02-14 | Speedy Express   |
+|   10447 | 2015-02-14 | United Package   |
+|   10448 | 2015-02-17 | United Package   |
+|   10449 | 2015-02-18 | United Package   |
+|   10450 | 2015-02-19 | United Package   |
+|   10451 | 2015-02-19 | Federal Shipping |
+|   10452 | 2015-02-20 | Speedy Express   |
+|   10453 | 2015-02-21 | United Package   |
+|   10454 | 2015-02-21 | Federal Shipping |
+|   10455 | 2015-02-24 | United Package   |
+|   10456 | 2015-02-25 | United Package   |
+|   10457 | 2015-02-25 | Speedy Express   |
+|   10458 | 2015-02-26 | Federal Shipping |
+|   10459 | 2015-02-27 | United Package   |
+|   10460 | 2015-02-28 | Speedy Express   |
+|   10461 | 2015-02-28 | Federal Shipping |
+|   10462 | 2015-03-03 | Speedy Express   |
+|   10463 | 2015-03-04 | Federal Shipping |
+|   10464 | 2015-03-04 | United Package   |
+|   10465 | 2015-03-05 | Federal Shipping |
+|   10466 | 2015-03-06 | Speedy Express   |
+|   10467 | 2015-03-06 | United Package   |
+|   10468 | 2015-03-07 | Federal Shipping |
+|   10469 | 2015-03-10 | Speedy Express   |
+|   10470 | 2015-03-11 | United Package   |
+|   10471 | 2015-03-11 | Federal Shipping |
+|   10472 | 2015-03-12 | Speedy Express   |
+|   10473 | 2015-03-13 | Federal Shipping |
+|   10474 | 2015-03-13 | United Package   |
+|   10475 | 2015-03-14 | Speedy Express   |
+|   10476 | 2015-03-17 | Federal Shipping |
+|   10477 | 2015-03-17 | United Package   |
+|   10478 | 2015-03-18 | Federal Shipping |
+|   10479 | 2015-03-19 | Federal Shipping |
+|   10480 | 2015-03-20 | United Package   |
+|   10481 | 2015-03-20 | United Package   |
+|   10482 | 2015-03-21 | Federal Shipping |
+|   10483 | 2015-03-24 | United Package   |
+|   10484 | 2015-03-24 | Federal Shipping |
+|   10485 | 2015-03-25 | United Package   |
+|   10486 | 2015-03-26 | United Package   |
+|   10487 | 2015-03-26 | United Package   |
+|   10488 | 2015-03-27 | United Package   |
+|   10489 | 2015-03-28 | United Package   |
+|   10490 | 2015-03-31 | United Package   |
+|   10491 | 2015-03-31 | Federal Shipping |
+|   10492 | 2015-04-01 | Speedy Express   |
+|   10493 | 2015-04-02 | Federal Shipping |
+|   10494 | 2015-04-02 | United Package   |
+|   10495 | 2015-04-03 | Federal Shipping |
+|   10496 | 2015-04-04 | United Package   |
+|   10497 | 2015-04-04 | Speedy Express   |
+|   10498 | 2015-04-07 | United Package   |
+|   10499 | 2015-04-08 | United Package   |
+|   10500 | 2015-04-09 | Speedy Express   |
+|   10501 | 2015-04-09 | Federal Shipping |
+|   10502 | 2015-04-10 | Speedy Express   |
+|   10503 | 2015-04-11 | United Package   |
+|   10504 | 2015-04-11 | Federal Shipping |
+|   10505 | 2015-04-14 | Federal Shipping |
+|   10506 | 2015-04-15 | United Package   |
+|   10507 | 2015-04-15 | Speedy Express   |
+|   10508 | 2015-04-16 | United Package   |
+|   10509 | 2015-04-17 | Speedy Express   |
+|   10510 | 2015-04-18 | Federal Shipping |
+|   10511 | 2015-04-18 | Federal Shipping |
+|   10512 | 2015-04-21 | United Package   |
+|   10513 | 2015-04-22 | Speedy Express   |
+|   10514 | 2015-04-22 | United Package   |
+|   10515 | 2015-04-23 | Speedy Express   |
+|   10516 | 2015-04-24 | Federal Shipping |
+|   10517 | 2015-04-24 | Federal Shipping |
+|   10518 | 2015-04-25 | United Package   |
+|   10519 | 2015-04-28 | Federal Shipping |
+|   10520 | 2015-04-29 | Speedy Express   |
+|   10521 | 2015-04-29 | United Package   |
+|   10522 | 2015-04-30 | Speedy Express   |
+|   10523 | 2015-05-01 | United Package   |
+|   10524 | 2015-05-01 | United Package   |
+|   10525 | 2015-05-02 | United Package   |
+|   10526 | 2015-05-05 | United Package   |
+|   10527 | 2015-05-05 | Speedy Express   |
+|   10528 | 2015-05-06 | United Package   |
+|   10529 | 2015-05-07 | United Package   |
+|   10530 | 2015-05-08 | United Package   |
+|   10531 | 2015-05-08 | Speedy Express   |
+|   10532 | 2015-05-09 | Federal Shipping |
+|   10533 | 2015-05-12 | Speedy Express   |
+|   10534 | 2015-05-12 | United Package   |
+|   10535 | 2015-05-13 | Speedy Express   |
+|   10536 | 2015-05-14 | United Package   |
+|   10537 | 2015-05-14 | Speedy Express   |
+|   10538 | 2015-05-15 | Federal Shipping |
+|   10539 | 2015-05-16 | Federal Shipping |
+|   10540 | 2015-05-19 | Federal Shipping |
+|   10541 | 2015-05-19 | Speedy Express   |
+|   10542 | 2015-05-20 | Federal Shipping |
+|   10543 | 2015-05-21 | United Package   |
+|   10544 | 2015-05-21 | Speedy Express   |
+|   10545 | 2015-05-22 | United Package   |
+|   10546 | 2015-05-23 | Federal Shipping |
+|   10547 | 2015-05-23 | United Package   |
+|   10548 | 2015-05-26 | United Package   |
+|   10549 | 2015-05-27 | Speedy Express   |
+|   10550 | 2015-05-28 | Federal Shipping |
+|   10551 | 2015-05-28 | Federal Shipping |
+|   10552 | 2015-05-29 | Speedy Express   |
+|   10553 | 2015-05-30 | United Package   |
+|   10554 | 2015-05-30 | Federal Shipping |
+|   10555 | 2015-06-02 | Federal Shipping |
+|   10556 | 2015-06-03 | Speedy Express   |
+|   10557 | 2015-06-03 | United Package   |
+|   10558 | 2015-06-04 | United Package   |
+|   10559 | 2015-06-05 | Speedy Express   |
+|   10560 | 2015-06-06 | Speedy Express   |
+|   10561 | 2015-06-06 | United Package   |
+|   10562 | 2015-06-09 | Speedy Express   |
+|   10563 | 2015-06-10 | United Package   |
+|   10564 | 2015-06-10 | Federal Shipping |
+|   10565 | 2015-06-11 | United Package   |
+|   10566 | 2015-06-12 | Speedy Express   |
+|   10567 | 2015-06-12 | Speedy Express   |
+|   10568 | 2015-06-13 | Federal Shipping |
+|   10569 | 2015-06-16 | Speedy Express   |
+|   10570 | 2015-06-17 | Federal Shipping |
+|   10571 | 2015-06-17 | Federal Shipping |
+|   10572 | 2015-06-18 | United Package   |
+|   10573 | 2015-06-19 | Federal Shipping |
+|   10574 | 2015-06-19 | United Package   |
+|   10575 | 2015-06-20 | Speedy Express   |
+|   10576 | 2015-06-23 | Federal Shipping |
+|   10577 | 2015-06-23 | United Package   |
+|   10578 | 2015-06-24 | Federal Shipping |
+|   10579 | 2015-06-25 | United Package   |
+|   10580 | 2015-06-26 | Federal Shipping |
+|   10581 | 2015-06-26 | Speedy Express   |
+|   10582 | 2015-06-27 | United Package   |
+|   10583 | 2015-06-30 | United Package   |
+|   10584 | 2015-06-30 | Speedy Express   |
+|   10585 | 2015-07-01 | Speedy Express   |
+|   10586 | 2015-07-02 | Speedy Express   |
+|   10587 | 2015-07-02 | Speedy Express   |
+|   10588 | 2015-07-03 | Federal Shipping |
+|   10589 | 2015-07-04 | United Package   |
+|   10590 | 2015-07-07 | Federal Shipping |
+|   10591 | 2015-07-07 | Speedy Express   |
+|   10592 | 2015-07-08 | Speedy Express   |
+|   10593 | 2015-07-09 | United Package   |
+|   10594 | 2015-07-09 | United Package   |
+|   10595 | 2015-07-10 | Speedy Express   |
+|   10596 | 2015-07-11 | Speedy Express   |
+|   10597 | 2015-07-11 | Federal Shipping |
+|   10598 | 2015-07-14 | Federal Shipping |
+|   10599 | 2015-07-15 | Federal Shipping |
+|   10600 | 2015-07-16 | Speedy Express   |
+|   10601 | 2015-07-16 | Speedy Express   |
+|   10602 | 2015-07-17 | United Package   |
+|   10603 | 2015-07-18 | United Package   |
+|   10604 | 2015-07-18 | Speedy Express   |
+|   10605 | 2015-07-21 | United Package   |
+|   10606 | 2015-07-22 | Federal Shipping |
+|   10607 | 2015-07-22 | Speedy Express   |
+|   10608 | 2015-07-23 | United Package   |
+|   10609 | 2015-07-24 | United Package   |
+|   10610 | 2015-07-25 | Speedy Express   |
+|   10611 | 2015-07-25 | United Package   |
+|   10612 | 2015-07-28 | United Package   |
+|   10613 | 2015-07-29 | United Package   |
+|   10614 | 2015-07-29 | Federal Shipping |
+|   10615 | 2015-07-30 | Federal Shipping |
+|   10616 | 2015-07-31 | United Package   |
+|   10617 | 2015-07-31 | United Package   |
+|   10618 | 2015-08-01 | Speedy Express   |
+|   10619 | 2015-08-04 | Federal Shipping |
+|   10620 | 2015-08-05 | Federal Shipping |
+|   10621 | 2015-08-05 | United Package   |
+|   10622 | 2015-08-06 | Federal Shipping |
+|   10623 | 2015-08-07 | United Package   |
+|   10624 | 2015-08-07 | United Package   |
+|   10625 | 2015-08-08 | Speedy Express   |
+|   10626 | 2015-08-11 | United Package   |
+|   10627 | 2015-08-11 | Federal Shipping |
+|   10628 | 2015-08-12 | Federal Shipping |
+|   10629 | 2015-08-12 | Federal Shipping |
+|   10630 | 2015-08-13 | United Package   |
+|   10631 | 2015-08-14 | Speedy Express   |
+|   10632 | 2015-08-14 | Speedy Express   |
+|   10633 | 2015-08-15 | Federal Shipping |
+|   10634 | 2015-08-15 | Federal Shipping |
+|   10635 | 2015-08-18 | Federal Shipping |
+|   10636 | 2015-08-19 | Speedy Express   |
+|   10637 | 2015-08-19 | Speedy Express   |
+|   10638 | 2015-08-20 | Speedy Express   |
+|   10639 | 2015-08-20 | Federal Shipping |
+|   10640 | 2015-08-21 | Speedy Express   |
+|   10641 | 2015-08-22 | United Package   |
+|   10642 | 2015-08-22 | Federal Shipping |
+|   10643 | 2015-08-25 | Speedy Express   |
+|   10644 | 2015-08-25 | United Package   |
+|   10645 | 2015-08-26 | Speedy Express   |
+|   10646 | 2015-08-27 | Federal Shipping |
+|   10647 | 2015-08-27 | United Package   |
+|   10648 | 2015-08-28 | United Package   |
+|   10649 | 2015-08-28 | Federal Shipping |
+|   10650 | 2015-08-29 | Federal Shipping |
+|   10651 | 2015-09-01 | United Package   |
+|   10652 | 2015-09-01 | United Package   |
+|   10653 | 2015-09-02 | Speedy Express   |
+|   10654 | 2015-09-02 | Speedy Express   |
+|   10655 | 2015-09-03 | United Package   |
+|   10656 | 2015-09-04 | Speedy Express   |
+|   10657 | 2015-09-04 | United Package   |
+|   10658 | 2015-09-05 | Speedy Express   |
+|   10659 | 2015-09-05 | United Package   |
+|   10660 | 2015-09-08 | Speedy Express   |
+|   10661 | 2015-09-09 | Federal Shipping |
+|   10662 | 2015-09-09 | United Package   |
+|   10663 | 2015-09-10 | United Package   |
+|   10664 | 2015-09-10 | Federal Shipping |
+|   10665 | 2015-09-11 | United Package   |
+|   10666 | 2015-09-12 | United Package   |
+|   10667 | 2015-09-12 | Speedy Express   |
+|   10668 | 2015-09-15 | United Package   |
+|   10669 | 2015-09-15 | Speedy Express   |
+|   10670 | 2015-09-16 | Speedy Express   |
+|   10671 | 2015-09-17 | Speedy Express   |
+|   10672 | 2015-09-17 | United Package   |
+|   10673 | 2015-09-18 | Speedy Express   |
+|   10674 | 2015-09-18 | United Package   |
+|   10675 | 2015-09-19 | United Package   |
+|   10676 | 2015-09-22 | United Package   |
+|   10677 | 2015-09-22 | Federal Shipping |
+|   10678 | 2015-09-23 | Federal Shipping |
+|   10679 | 2015-09-23 | Federal Shipping |
+|   10680 | 2015-09-24 | Speedy Express   |
+|   10681 | 2015-09-25 | Federal Shipping |
+|   10682 | 2015-09-25 | United Package   |
+|   10683 | 2015-09-26 | Speedy Express   |
+|   10684 | 2015-09-26 | Speedy Express   |
+|   10685 | 2015-09-29 | United Package   |
+|   10686 | 2015-09-30 | Speedy Express   |
+|   10687 | 2015-09-30 | United Package   |
+|   10688 | 2015-10-01 | United Package   |
+|   10689 | 2015-10-01 | United Package   |
+|   10690 | 2015-10-02 | Speedy Express   |
+|   10691 | 2015-10-03 | United Package   |
+|   10692 | 2015-10-03 | United Package   |
+|   10693 | 2015-10-06 | Federal Shipping |
+|   10694 | 2015-10-06 | Federal Shipping |
+|   10695 | 2015-10-07 | Speedy Express   |
+|   10696 | 2015-10-08 | Federal Shipping |
+|   10697 | 2015-10-08 | Speedy Express   |
+|   10698 | 2015-10-09 | Speedy Express   |
+|   10699 | 2015-10-09 | Federal Shipping |
+|   10700 | 2015-10-10 | Speedy Express   |
+|   10701 | 2015-10-13 | Federal Shipping |
+|   10702 | 2015-10-13 | Speedy Express   |
+|   10703 | 2015-10-14 | United Package   |
+|   10704 | 2015-10-14 | Speedy Express   |
+|   10705 | 2015-10-15 | United Package   |
+|   10706 | 2015-10-16 | Federal Shipping |
+|   10707 | 2015-10-16 | Federal Shipping |
+|   10708 | 2015-10-17 | United Package   |
+|   10709 | 2015-10-17 | Federal Shipping |
+|   10710 | 2015-10-20 | Speedy Express   |
+|   10711 | 2015-10-21 | United Package   |
+|   10712 | 2015-10-21 | Speedy Express   |
+|   10713 | 2015-10-22 | Speedy Express   |
+|   10714 | 2015-10-22 | Federal Shipping |
+|   10715 | 2015-10-23 | Speedy Express   |
+|   10716 | 2015-10-24 | United Package   |
+|   10717 | 2015-10-24 | United Package   |
+|   10718 | 2015-10-27 | Federal Shipping |
+|   10719 | 2015-10-27 | United Package   |
+|   10720 | 2015-10-28 | United Package   |
+|   10721 | 2015-10-29 | Federal Shipping |
+|   10722 | 2015-10-29 | Speedy Express   |
+|   10723 | 2015-10-30 | Speedy Express   |
+|   10724 | 2015-10-30 | United Package   |
+|   10725 | 2015-10-31 | Federal Shipping |
+|   10726 | 2015-11-03 | Speedy Express   |
+|   10727 | 2015-11-03 | Speedy Express   |
+|   10728 | 2015-11-04 | United Package   |
+|   10729 | 2015-11-04 | Federal Shipping |
+|   10730 | 2015-11-05 | Speedy Express   |
+|   10731 | 2015-11-06 | Speedy Express   |
+|   10732 | 2015-11-06 | Speedy Express   |
+|   10733 | 2015-11-07 | Federal Shipping |
+|   10734 | 2015-11-07 | Federal Shipping |
+|   10735 | 2015-11-10 | United Package   |
+|   10736 | 2015-11-11 | United Package   |
+|   10737 | 2015-11-11 | United Package   |
+|   10738 | 2015-11-12 | Speedy Express   |
+|   10739 | 2015-11-12 | Federal Shipping |
+|   10740 | 2015-11-13 | United Package   |
+|   10741 | 2015-11-14 | Federal Shipping |
+|   10742 | 2015-11-14 | Federal Shipping |
+|   10743 | 2015-11-17 | United Package   |
+|   10744 | 2015-11-17 | Speedy Express   |
+|   10745 | 2015-11-18 | Speedy Express   |
+|   10746 | 2015-11-19 | Federal Shipping |
+|   10747 | 2015-11-19 | Speedy Express   |
+|   10748 | 2015-11-20 | Speedy Express   |
+|   10749 | 2015-11-20 | United Package   |
+|   10750 | 2015-11-21 | Speedy Express   |
+|   10751 | 2015-11-24 | Federal Shipping |
+|   10752 | 2015-11-24 | Federal Shipping |
+|   10753 | 2015-11-25 | Speedy Express   |
+|   10754 | 2015-11-25 | Federal Shipping |
+|   10755 | 2015-11-26 | United Package   |
+|   10756 | 2015-11-27 | United Package   |
+|   10757 | 2015-11-27 | Speedy Express   |
+|   10758 | 2015-11-28 | Federal Shipping |
+|   10759 | 2015-11-28 | Federal Shipping |
+|   10760 | 2015-12-01 | Speedy Express   |
+|   10761 | 2015-12-02 | United Package   |
+|   10762 | 2015-12-02 | Speedy Express   |
+|   10763 | 2015-12-03 | Federal Shipping |
+|   10764 | 2015-12-03 | Federal Shipping |
+|   10765 | 2015-12-04 | Federal Shipping |
+|   10766 | 2015-12-05 | Speedy Express   |
+|   10767 | 2015-12-05 | Federal Shipping |
+|   10768 | 2015-12-08 | United Package   |
+|   10769 | 2015-12-08 | Speedy Express   |
+|   10770 | 2015-12-09 | Federal Shipping |
+|   10771 | 2015-12-10 | United Package   |
+|   10772 | 2015-12-10 | United Package   |
+|   10773 | 2015-12-11 | Federal Shipping |
+|   10774 | 2015-12-11 | Speedy Express   |
+|   10775 | 2015-12-12 | Speedy Express   |
+|   10776 | 2015-12-15 | Federal Shipping |
+|   10777 | 2015-12-15 | United Package   |
+|   10778 | 2015-12-16 | Speedy Express   |
+|   10779 | 2015-12-16 | United Package   |
+|   10780 | 2015-12-16 | Speedy Express   |
+|   10781 | 2015-12-17 | Federal Shipping |
+|   10782 | 2015-12-17 | Federal Shipping |
+|   10783 | 2015-12-18 | United Package   |
+|   10784 | 2015-12-18 | Federal Shipping |
+|   10785 | 2015-12-18 | Federal Shipping |
+|   10786 | 2015-12-19 | Speedy Express   |
+|   10787 | 2015-12-19 | Speedy Express   |
+|   10788 | 2015-12-22 | United Package   |
+|   10789 | 2015-12-22 | United Package   |
+|   10790 | 2015-12-22 | Speedy Express   |
+|   10791 | 2015-12-23 | United Package   |
+|   10792 | 2015-12-23 | Federal Shipping |
+|   10793 | 2015-12-24 | Federal Shipping |
+|   10794 | 2015-12-24 | Speedy Express   |
+|   10795 | 2015-12-24 | United Package   |
+|   10796 | 2015-12-25 | Speedy Express   |
+|   10797 | 2015-12-25 | United Package   |
+|   10798 | 2015-12-26 | Speedy Express   |
+|   10799 | 2015-12-26 | Federal Shipping |
+|   10800 | 2015-12-26 | Federal Shipping |
+|   10801 | 2015-12-29 | United Package   |
+|   10802 | 2015-12-29 | United Package   |
+|   10803 | 2015-12-30 | Speedy Express   |
+|   10804 | 2015-12-30 | United Package   |
+|   10805 | 2015-12-30 | Federal Shipping |
+|   10806 | 2015-12-31 | United Package   |
+|   10807 | 2015-12-31 | Speedy Express   |
+|   10808 | 2016-01-01 | Federal Shipping |
+|   10809 | 2016-01-01 | Speedy Express   |
+|   10810 | 2016-01-01 | Federal Shipping |
+|   10811 | 2016-01-02 | Speedy Express   |
+|   10812 | 2016-01-02 | Speedy Express   |
+|   10813 | 2016-01-05 | Speedy Express   |
+|   10814 | 2016-01-05 | Federal Shipping |
+|   10815 | 2016-01-05 | Federal Shipping |
+|   10816 | 2016-01-06 | United Package   |
+|   10817 | 2016-01-06 | United Package   |
+|   10818 | 2016-01-07 | Federal Shipping |
+|   10819 | 2016-01-07 | Federal Shipping |
+|   10820 | 2016-01-07 | United Package   |
+|   10821 | 2016-01-08 | Speedy Express   |
+|   10822 | 2016-01-08 | Federal Shipping |
+|   10823 | 2016-01-09 | United Package   |
+|   10824 | 2016-01-09 | Speedy Express   |
+|   10825 | 2016-01-09 | Speedy Express   |
+|   10826 | 2016-01-12 | Speedy Express   |
+|   10827 | 2016-01-12 | United Package   |
+|   10828 | 2016-01-13 | Speedy Express   |
+|   10829 | 2016-01-13 | Speedy Express   |
+|   10830 | 2016-01-13 | United Package   |
+|   10831 | 2016-01-14 | United Package   |
+|   10832 | 2016-01-14 | United Package   |
+|   10833 | 2016-01-15 | United Package   |
+|   10834 | 2016-01-15 | Federal Shipping |
+|   10835 | 2016-01-15 | Federal Shipping |
+|   10836 | 2016-01-16 | Speedy Express   |
+|   10837 | 2016-01-16 | Federal Shipping |
+|   10838 | 2016-01-19 | Federal Shipping |
+|   10839 | 2016-01-19 | Federal Shipping |
+|   10840 | 2016-01-19 | United Package   |
+|   10841 | 2016-01-20 | United Package   |
+|   10842 | 2016-01-20 | Federal Shipping |
+|   10843 | 2016-01-21 | United Package   |
+|   10844 | 2016-01-21 | United Package   |
+|   10845 | 2016-01-21 | Speedy Express   |
+|   10846 | 2016-01-22 | Federal Shipping |
+|   10847 | 2016-01-22 | Federal Shipping |
+|   10848 | 2016-01-23 | United Package   |
+|   10849 | 2016-01-23 | United Package   |
+|   10850 | 2016-01-23 | Speedy Express   |
+|   10851 | 2016-01-26 | Speedy Express   |
+|   10852 | 2016-01-26 | Speedy Express   |
+|   10853 | 2016-01-27 | United Package   |
+|   10854 | 2016-01-27 | United Package   |
+|   10855 | 2016-01-27 | Speedy Express   |
+|   10856 | 2016-01-28 | United Package   |
+|   10857 | 2016-01-28 | United Package   |
+|   10858 | 2016-01-29 | Speedy Express   |
+|   10859 | 2016-01-29 | United Package   |
+|   10860 | 2016-01-29 | Federal Shipping |
+|   10861 | 2016-01-30 | United Package   |
+|   10862 | 2016-01-30 | United Package   |
+|   10863 | 2016-02-02 | United Package   |
+|   10864 | 2016-02-02 | United Package   |
+|   10865 | 2016-02-02 | Speedy Express   |
+|   10866 | 2016-02-03 | Speedy Express   |
+|   10867 | 2016-02-03 | Speedy Express   |
+|   10868 | 2016-02-04 | United Package   |
+|   10869 | 2016-02-04 | Speedy Express   |
+|   10870 | 2016-02-04 | Federal Shipping |
+|   10871 | 2016-02-05 | United Package   |
+|   10872 | 2016-02-05 | United Package   |
+|   10873 | 2016-02-06 | Speedy Express   |
+|   10874 | 2016-02-06 | United Package   |
+|   10875 | 2016-02-06 | United Package   |
+|   10876 | 2016-02-09 | Federal Shipping |
+|   10877 | 2016-02-09 | Speedy Express   |
+|   10878 | 2016-02-10 | Speedy Express   |
+|   10879 | 2016-02-10 | Federal Shipping |
+|   10880 | 2016-02-10 | Speedy Express   |
+|   10881 | 2016-02-11 | Speedy Express   |
+|   10882 | 2016-02-11 | Federal Shipping |
+|   10883 | 2016-02-12 | Federal Shipping |
+|   10884 | 2016-02-12 | United Package   |
+|   10885 | 2016-02-12 | Federal Shipping |
+|   10886 | 2016-02-13 | Speedy Express   |
+|   10887 | 2016-02-13 | Federal Shipping |
+|   10888 | 2016-02-16 | United Package   |
+|   10889 | 2016-02-16 | Federal Shipping |
+|   10890 | 2016-02-16 | Speedy Express   |
+|   10891 | 2016-02-17 | United Package   |
+|   10892 | 2016-02-17 | United Package   |
+|   10893 | 2016-02-18 | United Package   |
+|   10894 | 2016-02-18 | Speedy Express   |
+|   10895 | 2016-02-18 | Speedy Express   |
+|   10896 | 2016-02-19 | Federal Shipping |
+|   10897 | 2016-02-19 | United Package   |
+|   10898 | 2016-02-20 | United Package   |
+|   10899 | 2016-02-20 | Federal Shipping |
+|   10900 | 2016-02-20 | United Package   |
+|   10901 | 2016-02-23 | Speedy Express   |
+|   10902 | 2016-02-23 | Speedy Express   |
+|   10903 | 2016-02-24 | Federal Shipping |
+|   10904 | 2016-02-24 | Federal Shipping |
+|   10905 | 2016-02-24 | United Package   |
+|   10906 | 2016-02-25 | Federal Shipping |
+|   10907 | 2016-02-25 | Federal Shipping |
+|   10908 | 2016-02-26 | United Package   |
+|   10909 | 2016-02-26 | United Package   |
+|   10910 | 2016-02-26 | Federal Shipping |
+|   10911 | 2016-02-26 | Speedy Express   |
+|   10912 | 2016-02-26 | United Package   |
+|   10913 | 2016-02-26 | Speedy Express   |
+|   10914 | 2016-02-27 | Speedy Express   |
+|   10915 | 2016-02-27 | United Package   |
+|   10916 | 2016-02-27 | United Package   |
+|   10917 | 2016-03-02 | United Package   |
+|   10918 | 2016-03-02 | Federal Shipping |
+|   10919 | 2016-03-02 | United Package   |
+|   10920 | 2016-03-03 | United Package   |
+|   10921 | 2016-03-03 | Speedy Express   |
+|   10922 | 2016-03-03 | Federal Shipping |
+|   10923 | 2016-03-03 | Federal Shipping |
+|   10924 | 2016-03-04 | United Package   |
+|   10925 | 2016-03-04 | Speedy Express   |
+|   10926 | 2016-03-04 | Federal Shipping |
+|   10927 | 2016-03-05 | Speedy Express   |
+|   10928 | 2016-03-05 | Speedy Express   |
+|   10929 | 2016-03-05 | Speedy Express   |
+|   10930 | 2016-03-06 | Federal Shipping |
+|   10931 | 2016-03-06 | United Package   |
+|   10932 | 2016-03-06 | Speedy Express   |
+|   10933 | 2016-03-06 | Federal Shipping |
+|   10934 | 2016-03-09 | Federal Shipping |
+|   10935 | 2016-03-09 | Federal Shipping |
+|   10936 | 2016-03-09 | United Package   |
+|   10937 | 2016-03-10 | Federal Shipping |
+|   10938 | 2016-03-10 | United Package   |
+|   10939 | 2016-03-10 | United Package   |
+|   10940 | 2016-03-11 | Federal Shipping |
+|   10941 | 2016-03-11 | United Package   |
+|   10942 | 2016-03-11 | Federal Shipping |
+|   10943 | 2016-03-11 | United Package   |
+|   10944 | 2016-03-12 | Federal Shipping |
+|   10945 | 2016-03-12 | Speedy Express   |
+|   10946 | 2016-03-12 | United Package   |
+|   10947 | 2016-03-13 | United Package   |
+|   10948 | 2016-03-13 | Federal Shipping |
+|   10949 | 2016-03-13 | Federal Shipping |
+|   10950 | 2016-03-16 | United Package   |
+|   10951 | 2016-03-16 | United Package   |
+|   10952 | 2016-03-16 | Speedy Express   |
+|   10953 | 2016-03-16 | United Package   |
+|   10954 | 2016-03-17 | Speedy Express   |
+|   10955 | 2016-03-17 | United Package   |
+|   10956 | 2016-03-17 | United Package   |
+|   10957 | 2016-03-18 | Federal Shipping |
+|   10958 | 2016-03-18 | United Package   |
+|   10959 | 2016-03-18 | United Package   |
+|   10960 | 2016-03-19 | Speedy Express   |
+|   10961 | 2016-03-19 | Speedy Express   |
+|   10962 | 2016-03-19 | United Package   |
+|   10963 | 2016-03-19 | Federal Shipping |
+|   10964 | 2016-03-20 | United Package   |
+|   10965 | 2016-03-20 | Federal Shipping |
+|   10966 | 2016-03-20 | Speedy Express   |
+|   10967 | 2016-03-23 | United Package   |
+|   10968 | 2016-03-23 | Federal Shipping |
+|   10969 | 2016-03-23 | United Package   |
+|   10970 | 2016-03-24 | Speedy Express   |
+|   10971 | 2016-03-24 | United Package   |
+|   10972 | 2016-03-24 | United Package   |
+|   10973 | 2016-03-24 | United Package   |
+|   10974 | 2016-03-25 | Federal Shipping |
+|   10975 | 2016-03-25 | Federal Shipping |
+|   10976 | 2016-03-25 | Speedy Express   |
+|   10977 | 2016-03-26 | Federal Shipping |
+|   10978 | 2016-03-26 | United Package   |
+|   10979 | 2016-03-26 | United Package   |
+|   10980 | 2016-03-27 | Speedy Express   |
+|   10981 | 2016-03-27 | United Package   |
+|   10982 | 2016-03-27 | Speedy Express   |
+|   10983 | 2016-03-27 | United Package   |
+|   10984 | 2016-03-30 | Federal Shipping |
+|   10985 | 2016-03-30 | Speedy Express   |
+|   10986 | 2016-03-30 | United Package   |
+|   10987 | 2016-03-31 | Speedy Express   |
+|   10988 | 2016-03-31 | United Package   |
+|   10989 | 2016-03-31 | Speedy Express   |
+|   10990 | 2016-04-01 | Federal Shipping |
+|   10991 | 2016-04-01 | Speedy Express   |
+|   10992 | 2016-04-01 | Federal Shipping |
+|   10993 | 2016-04-01 | Federal Shipping |
+|   10994 | 2016-04-02 | Federal Shipping |
+|   10995 | 2016-04-02 | Federal Shipping |
+|   10996 | 2016-04-02 | United Package   |
+|   10997 | 2016-04-03 | United Package   |
+|   10998 | 2016-04-03 | United Package   |
+|   10999 | 2016-04-03 | United Package   |
+|   11000 | 2016-04-06 | Federal Shipping |
+|   11001 | 2016-04-06 | United Package   |
+|   11002 | 2016-04-06 | Speedy Express   |
+|   11003 | 2016-04-06 | Federal Shipping |
+|   11004 | 2016-04-07 | Speedy Express   |
+|   11005 | 2016-04-07 | Speedy Express   |
+|   11006 | 2016-04-07 | United Package   |
+|   11007 | 2016-04-08 | United Package   |
+|   11008 | 2016-04-08 | Federal Shipping |
+|   11009 | 2016-04-08 | Speedy Express   |
+|   11010 | 2016-04-09 | United Package   |
+|   11011 | 2016-04-09 | Speedy Express   |
+|   11012 | 2016-04-09 | Federal Shipping |
+|   11013 | 2016-04-09 | Speedy Express   |
+|   11014 | 2016-04-10 | Federal Shipping |
+|   11015 | 2016-04-10 | United Package   |
+|   11016 | 2016-04-10 | United Package   |
+|   11017 | 2016-04-13 | United Package   |
+|   11018 | 2016-04-13 | United Package   |
+|   11019 | 2016-04-13 | Federal Shipping |
+|   11020 | 2016-04-14 | United Package   |
+|   11021 | 2016-04-14 | Speedy Express   |
+|   11022 | 2016-04-14 | United Package   |
+|   11023 | 2016-04-14 | United Package   |
+|   11024 | 2016-04-15 | Speedy Express   |
+|   11025 | 2016-04-15 | Federal Shipping |
+|   11026 | 2016-04-15 | Speedy Express   |
+|   11027 | 2016-04-16 | Speedy Express   |
+|   11028 | 2016-04-16 | Speedy Express   |
+|   11029 | 2016-04-16 | Speedy Express   |
+|   11030 | 2016-04-17 | United Package   |
+|   11031 | 2016-04-17 | United Package   |
+|   11032 | 2016-04-17 | Federal Shipping |
+|   11033 | 2016-04-17 | Federal Shipping |
+|   11034 | 2016-04-20 | Speedy Express   |
+|   11035 | 2016-04-20 | United Package   |
+|   11036 | 2016-04-20 | Federal Shipping |
+|   11037 | 2016-04-21 | Speedy Express   |
+|   11038 | 2016-04-21 | United Package   |
+|   11039 | 2016-04-21 | United Package   |
+|   11040 | 2016-04-22 | Federal Shipping |
+|   11041 | 2016-04-22 | United Package   |
+|   11042 | 2016-04-22 | Speedy Express   |
+|   11043 | 2016-04-22 | United Package   |
+|   11044 | 2016-04-23 | Speedy Express   |
+|   11045 | 2016-04-23 | United Package   |
+|   11046 | 2016-04-23 | United Package   |
+|   11047 | 2016-04-24 | Federal Shipping |
+|   11048 | 2016-04-24 | Federal Shipping |
+|   11049 | 2016-04-24 | Speedy Express   |
+|   11050 | 2016-04-27 | United Package   |
+|   11051 | 2016-04-27 | Federal Shipping |
+|   11052 | 2016-04-27 | Speedy Express   |
+|   11053 | 2016-04-27 | United Package   |
+|   11054 | 2016-04-28 | Speedy Express   |
+|   11055 | 2016-04-28 | United Package   |
+|   11056 | 2016-04-28 | United Package   |
+|   11057 | 2016-04-29 | Federal Shipping |
+|   11058 | 2016-04-29 | Federal Shipping |
+|   11059 | 2016-04-29 | United Package   |
+|   11060 | 2016-04-30 | United Package   |
+|   11061 | 2016-04-30 | Federal Shipping |
+|   11062 | 2016-04-30 | United Package   |
+|   11063 | 2016-04-30 | United Package   |
+|   11064 | 2016-05-01 | Speedy Express   |
+|   11065 | 2016-05-01 | Speedy Express   |
+|   11066 | 2016-05-01 | United Package   |
+|   11067 | 2016-05-04 | United Package   |
+|   11068 | 2016-05-04 | United Package   |
+|   11069 | 2016-05-04 | United Package   |
+|   11070 | 2016-05-05 | Speedy Express   |
+|   11071 | 2016-05-05 | Speedy Express   |
+|   11072 | 2016-05-05 | United Package   |
+|   11073 | 2016-05-05 | United Package   |
+|   11074 | 2016-05-06 | United Package   |
+|   11075 | 2016-05-06 | United Package   |
+|   11076 | 2016-05-06 | United Package   |
+|   11077 | 2016-05-06 | United Package   |
