@@ -1,0 +1,358 @@
+:PROPERTIES:
+:header-args:sql: :engine postgresql
+:header-args:sql+: :dbuser postgres
+:header-args:sql+: :dbpassword postgres
+:header-args:sql+: :database sql_problems
+:header-args:sql+: :dbhost 127.0.0.1
+:header-args:sql+: :dbport 5432
+:END:
+* DONE 20. Categories, and total products in each category
+CLOSED: [2022-11-26 sáb 21:09]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-26 sáb 21:09]
+- State "IN_PROGRESS" from              [2022-11-26 sáb 20:55]
+:END:
+
+#+begin_src sql
+  SELECT CategoryName, COUNT(ProductID) AS TotalProducts
+  FROM Products AS P JOIN Categories AS C ON P.CategoryID=C.CategoryID
+  GROUP BY CategoryName
+  ORDER BY TotalProducts DESC
+#+end_src
+
+#+RESULTS:
+| categoryname   | totalproducts |
+|----------------+---------------|
+| Confections    |            13 |
+| Condiments     |            12 |
+| Beverages      |            12 |
+| Seafood        |            12 |
+| Dairy Products |            10 |
+| Grains/Cereals |             7 |
+| Meat/Poultry   |             6 |
+| Produce        |             5 |
+
+* DONE 21. Total customers by country
+CLOSED: [2022-11-26 sáb 21:17]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-26 sáb 21:17]
+- State "IN_PROGRESS" from              [2022-11-26 sáb 21:09]
+:END:
+
+#+begin_src sql
+  SELECT Country, City, COUNT(*) AS TotalCustomers
+  FROM Customers
+  GROUP BY Country, City
+  ORDER BY TotalCustomers DESC
+#+end_src
+
+#+RESULTS:
+| country     | city            | totalcustomers |
+|-------------+-----------------+----------------|
+| UK          | London          |              6 |
+| Mexico      | MÃ©xico D.F.    |              5 |
+| Brazil      | Sao Paulo       |              4 |
+| Brazil      | Rio de Janeiro  |              3 |
+| Argentina   | Buenos Aires    |              3 |
+| Spain       | Madrid          |              3 |
+| France      | Nantes          |              2 |
+| France      | Paris           |              2 |
+| Portugal    | Lisboa          |              2 |
+| USA         | Portland        |              2 |
+| Austria     | Graz            |              1 |
+| Germany     | MÃ¦nster        |              1 |
+| Italy       | Torino          |              1 |
+| Germany     | Cunewalde       |              1 |
+| Denmark     | Kobenhavn       |              1 |
+| USA         | Seattle         |              1 |
+| Italy       | Reggio Emilia   |              1 |
+| France      | Marseille       |              1 |
+| Finland     | Helsinki        |              1 |
+| Finland     | Oulu            |              1 |
+| France      | Lyon            |              1 |
+| USA         | Eugene          |              1 |
+| USA         | Elgin           |              1 |
+| USA         | Anchorage       |              1 |
+| Germany     | Brandenburg     |              1 |
+| USA         | Walla Walla     |              1 |
+| Germany     | Mannheim        |              1 |
+| Germany     | Berlin          |              1 |
+| Germany     | KÃln          |              1 |
+| Venezuela   | I. de Margarita |              1 |
+| Germany     | Aachen          |              1 |
+| Poland      | Warszawa        |              1 |
+| USA         | Lander          |              1 |
+| Switzerland | Bern            |              1 |
+| Spain       | Barcelona       |              1 |
+| Belgium     | Charleroi       |              1 |
+| Sweden      | LuleÃÑ          |              1 |
+| Brazil      | Campinas        |              1 |
+| USA         | San Francisco   |              1 |
+| Germany     | Frankfurt a.M.  |              1 |
+| Venezuela   | Caracas         |              1 |
+| Germany     | MÃ¦nchen        |              1 |
+| Venezuela   | San CristÃ³bal  |              1 |
+| USA         | Butte           |              1 |
+| USA         | Albuquerque     |              1 |
+| Norway      | Stavern         |              1 |
+| France      | Toulouse        |              1 |
+| France      | Versailles      |              1 |
+| Venezuela   | Barquisimeto    |              1 |
+| France      | Reims           |              1 |
+| France      | Lille           |              1 |
+| Italy       | Bergamo         |              1 |
+| Ireland     | Cork            |              1 |
+| France      | Strasbourg      |              1 |
+| Austria     | Salzburg        |              1 |
+| Canada      | MontrÃ©al       |              1 |
+| UK          | Cowes           |              1 |
+| USA         | Boise           |              1 |
+| Brazil      | Resende         |              1 |
+| Denmark     | Ãàrhus          |              1 |
+| Germany     | Stuttgart       |              1 |
+| Switzerland | GenÃ¿ve         |              1 |
+| Germany     | Leipzig         |              1 |
+| Canada      | Vancouver       |              1 |
+| Sweden      | BrÃñcke         |              1 |
+| USA         | Kirkland        |              1 |
+| Spain       | Sevilla         |              1 |
+| Canada      | Tsawassen       |              1 |
+| Belgium     | Bruxelles       |              1 |
+
+* DONE 22. Products that need reordering
+CLOSED: [2022-11-26 sáb 21:21]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-26 sáb 21:21]
+- State "IN_PROGRESS" from              [2022-11-26 sáb 21:17]
+:END:
+
+#+begin_src sql
+  SELECT ProductID, ProductName, UnitsInStock, ReorderLevel
+  FROM Products
+  WHERE UnitsInStock <= ReorderLevel
+  ORDER BY ProductID
+#+end_src
+
+#+RESULTS:
+| productid | productname                 | unitsinstock | reorderlevel |
+|-----------+-----------------------------+--------------+--------------|
+|         2 | Chang                       |           17 |           25 |
+|         3 | Aniseed Syrup               |           13 |           25 |
+|         5 | Chef Anton's Gumbo Mix      |            0 |            0 |
+|        11 | Queso Cabrales              |           22 |           30 |
+|        17 | Alice Mutton                |            0 |            0 |
+|        21 | Sir Rodney's Scones         |            3 |            5 |
+|        29 | ThÃ¦ringer Rostbratwurst    |            0 |            0 |
+|        30 | Nord-Ost Matjeshering       |           10 |           15 |
+|        31 | Gorgonzola Telino           |            0 |           20 |
+|        32 | Mascarpone Fabioli          |            9 |           25 |
+|        37 | Gravad lax                  |           11 |           25 |
+|        43 | Ipoh Coffee                 |           17 |           25 |
+|        45 | Rogede sild                 |            5 |           15 |
+|        48 | Chocolade                   |           15 |           25 |
+|        49 | Maxilaku                    |           10 |           15 |
+|        53 | Perth Pasties               |            0 |            0 |
+|        56 | Gnocchi di nonna Alice      |           21 |           30 |
+|        64 | Wimmers gute SemmelknÃdel |           22 |           30 |
+|        66 | Louisiana Hot Spiced Okra   |            4 |           20 |
+|        68 | Scottish Longbreads         |            6 |           15 |
+|        70 | Outback Lager               |           15 |           30 |
+|        74 | Longlife Tofu               |            4 |            5 |
+
+* DONE 23. Products that need reordering continued
+CLOSED: [2022-11-26 sáb 21:24]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-26 sáb 21:24]
+- State "IN_PROGRESS" from              [2022-11-26 sáb 21:21]
+:END:
+#+begin_src sql
+  SELECT ProductID, ProductName, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued
+  FROM Products
+  WHERE UnitsInStock + UnitsOnOrder <= ReorderLevel AND Discontinued='f'
+  ORDER BY ProductID
+#+end_src
+
+#+RESULTS:
+| productid | productname           | unitsinstock | unitsonorder | reorderlevel | discontinued |
+|-----------+-----------------------+--------------+--------------+--------------+--------------|
+|        30 | Nord-Ost Matjeshering |           10 |            0 |           15 | f            |
+|        70 | Outback Lager         |           15 |           10 |           30 | f            |
+
+* DONE 24. Customer list by region
+CLOSED: [2022-11-26 sáb 22:37]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-26 sáb 22:37]
+- State "IN_PROGRESS" from "DONE"       [2022-11-26 sáb 22:37]
+- State "DONE"       from "IN_PROGRESS" [2022-11-26 sáb 21:35]
+- State "IN_PROGRESS" from              [2022-11-26 sáb 21:24]
+:END:
+    * The problem given by the author seems to be specific of SQL Server. In postgresql, this is handled by simply using
+      the =ORDER BY= Clause.
+      * In SQL Server, you need to create a secondary columns, that will act as the index to send the null values to the end
+        of the query result
+
+#+begin_src sql
+  SELECT CustomerID, CompanyName, Region,
+  CASE WHEN Region IS NULL THEN 1 ELSE 0
+  END AS Ordered
+  FROM Customers
+  ORDER BY Ordered DESC, Region, CustomerID
+#+end_src
+
+#+RESULTS:
+| customerid | companyname                          | region        | ordered |
+|------------+--------------------------------------+---------------+---------|
+| ALFKI      | Alfreds Futterkiste                  |               |       1 |
+| ANATR      | Ana Trujillo Emparedados y helados   |               |       1 |
+| ANTON      | Antonio Moreno TaquerÃ¡a             |               |       1 |
+| AROUT      | Around the Horn                      |               |       1 |
+| BERGS      | Berglunds snabbkÃp                 |               |       1 |
+| BLAUS      | Blauer See Delikatessen              |               |       1 |
+| BLONP      | Blondesddsl pÃ¿re et fils            |               |       1 |
+| BOLID      | BÃ³lido Comidas preparadas           |               |       1 |
+| BONAP      | Bon app'                             |               |       1 |
+| BSBEV      | B's Beverages                        |               |       1 |
+| CACTU      | Cactus Comidas para llevar           |               |       1 |
+| CENTC      | Centro comercial Moctezuma           |               |       1 |
+| CHOPS      | Chop-suey Chinese                    |               |       1 |
+| CONSH      | Consolidated Holdings                |               |       1 |
+| DRACD      | Drachenblut Delikatessen             |               |       1 |
+| DUMON      | Du monde entier                      |               |       1 |
+| EASTC      | Eastern Connection                   |               |       1 |
+| ERNSH      | Ernst Handel                         |               |       1 |
+| FISSA      | FISSA Fabrica Inter. Salchichas S.A. |               |       1 |
+| FOLIG      | Folies gourmandes                    |               |       1 |
+| FOLKO      | Folk och fÃñ HB                      |               |       1 |
+| FRANK      | Frankenversand                       |               |       1 |
+| FRANR      | France restauration                  |               |       1 |
+| FRANS      | Franchi S.p.A.                       |               |       1 |
+| FURIB      | Furia Bacalhau e Frutos do Mar       |               |       1 |
+| GALED      | GalerÃ¡a del gastrÃ³nomo             |               |       1 |
+| GODOS      | Godos Cocina TÃ¡pica                 |               |       1 |
+| KOENE      | KÃniglich Essen                    |               |       1 |
+| LACOR      | La corne d'abondance                 |               |       1 |
+| LAMAI      | La maison d'Asie                     |               |       1 |
+| LEHMS      | Lehmanns Marktstand                  |               |       1 |
+| MAGAA      | Magazzini Alimentari Riuniti         |               |       1 |
+| MAISD      | Maison Dewey                         |               |       1 |
+| MORGK      | Morgenstern Gesundkost               |               |       1 |
+| NORTS      | North/South                          |               |       1 |
+| OCEAN      | OcÃ©ano AtlÃíntico Ltda.             |               |       1 |
+| OTTIK      | Ottilies KÃñseladen                  |               |       1 |
+| PARIS      | Paris spÃ©cialitÃ©s                  |               |       1 |
+| PERIC      | Pericles Comidas clÃísicas           |               |       1 |
+| PICCO      | Piccolo und mehr                     |               |       1 |
+| PRINI      | Princesa Isabel Vinhos               |               |       1 |
+| QUICK      | QUICK-Stop                           |               |       1 |
+| RANCH      | Rancho grande                        |               |       1 |
+| REGGC      | Reggiani Caseifici                   |               |       1 |
+| RICSU      | Richter Supermarkt                   |               |       1 |
+| ROMEY      | Romero y tomillo                     |               |       1 |
+| SANTG      | SantÃ© Gourmet                       |               |       1 |
+| SEVES      | Seven Seas Imports                   |               |       1 |
+| SIMOB      | Simons bistro                        |               |       1 |
+| SPECD      | SpÃ©cialitÃ©s du monde               |               |       1 |
+| SUPRD      | SuprÃ¬mes dÃ©lices                   |               |       1 |
+| TOMSP      | Toms SpezialitÃñten                  |               |       1 |
+| TORTU      | Tortuga Restaurante                  |               |       1 |
+| VAFFE      | Vaffeljernet                         |               |       1 |
+| VICTE      | Victuailles en stock                 |               |       1 |
+| VINET      | Vins et alcools Chevalier            |               |       1 |
+| WANDK      | Die Wandernde Kuh                    |               |       1 |
+| WARTH      | Wartian Herkku                       |               |       1 |
+| WILMK      | Wilman Kala                          |               |       1 |
+| WOLZA      | Wolski  Zajazd                       |               |       1 |
+| OLDWO      | Old World Delicatessen               | AK            |       0 |
+| BOTTM      | Bottom-Dollar Markets                | BC            |       0 |
+| LAUGB      | Laughing Bacchus Wine Cellars        | BC            |       0 |
+| LETSS      | Let's Stop N Shop                    | CA            |       0 |
+| HUNGO      | Hungry Owl All-Night Grocers         | Co. Cork      |       0 |
+| GROSR      | GROSELLA-Restaurante                 | DF            |       0 |
+| SAVEA      | Save-a-lot Markets                   | ID            |       0 |
+| ISLAT      | Island Trading                       | Isle of Wight |       0 |
+| LILAS      | LILA-Supermercado                    | Lara          |       0 |
+| THECR      | The Cracker Box                      | MT            |       0 |
+| RATTC      | Rattlesnake Canyon Grocery           | NM            |       0 |
+| LINOD      | LINO-Delicateses                     | Nueva Esparta |       0 |
+| GREAL      | Great Lakes Food Market              | OR            |       0 |
+| HUNGC      | Hungry Coyote Import Store           | OR            |       0 |
+| LONEP      | Lonesome Pine Restaurant             | OR            |       0 |
+| THEBI      | The Big Cheese                       | OR            |       0 |
+| MEREP      | MÃ¿re Paillarde                      | QuÃ©bec       |       0 |
+| HANAR      | Hanari Carnes                        | RJ            |       0 |
+| QUEDE      | Que DelÃ¡cia                         | RJ            |       0 |
+| RICAR      | Ricardo Adocicados                   | RJ            |       0 |
+| COMMI      | ComÃ©rcio Mineiro                    | SP            |       0 |
+| FAMIA      | Familia Arquibaldo                   | SP            |       0 |
+| GOURL      | Gourmet Lanchonetes                  | SP            |       0 |
+| QUEEN      | Queen Cozinha                        | SP            |       0 |
+| TRADH      | TradiÃºÃúo Hipermercados             | SP            |       0 |
+| WELLI      | Wellington Importadora               | SP            |       0 |
+| HILAA      | HILARION-Abastos                     | TÃíchira      |       0 |
+| LAZYK      | Lazy K Kountry Store                 | WA            |       0 |
+| TRAIH      | Trail's Head Gourmet Provisioners    | WA            |       0 |
+| WHITC      | White Clover Markets                 | WA            |       0 |
+| SPLIR      | Split Rail Beer & Ale                | WY            |       0 |
+
+* DONE 25. High freight charges
+CLOSED: [2022-11-27 dom 01:15]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-27 dom 01:15]
+- State "IN_PROGRESS" from              [2022-11-26 sáb 22:36]
+:END:
+
+#+begin_src sql
+  SELECT ShipCountry, SUM(Freight) / COUNT(*) AS AverageFreight
+  FROM Orders
+  GROUP BY ShipCountry
+  ORDER BY AverageFreight DESC LIMIT 3
+#+end_src
+
+#+RESULTS:
+| shipcountry | averagefreight |
+|-------------+----------------|
+| Austria     | $184.78        |
+| Ireland     | $145.01        |
+| USA         | $112.87        |
+
+Second method using AVG
+
+   * Freight is using money as the type, thus, in order to use the AVG function, we need to first cast the type of the column to =numeric=
+
+#+begin_src sql
+  SELECT ShipCountry, AVG(CAST(Freight as numeric(8,2))) AS AverageFreight
+  FROM Orders
+  GROUP BY ShipCountry
+  ORDER BY AverageFreight DESC LIMIT 3
+#+end_src
+
+#+RESULTS:
+| shipcountry |       averagefreight |
+|-------------+----------------------|
+| Austria     | 184.7875000000000000 |
+| Ireland     | 145.0126315789473684 |
+| USA         | 112.8794262295081967 |
+* DONE 26. High freight charges - 2015
+CLOSED: [2022-11-27 dom 01:15]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-27 dom 01:15]
+- State "IN_PROGRESS" from              [2022-11-26 sáb 22:36]
+:END:
+
+
+   * Extract used to get a particular element from a date type
+
+#+begin_src sql
+  SELECT ShipCountry, SUM(Freight) / COUNT(*) AS AverageFreight
+  FROM Orders
+  WHERE EXTRACT(YEAR FROM OrderDate) = 2015
+  GROUP BY ShipCountry
+  ORDER BY AverageFreight DESC LIMIT 3
+#+end_src
+
+#+RESULTS:
+| shipcountry | averagefreight |
+|-------------+----------------|
+| Austria     | $178.36        |
+| Switzerland | $117.17        |
+| France      | $113.99        |
