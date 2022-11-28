@@ -356,3 +356,673 @@ CLOSED: [2022-11-27 dom 01:15]
 | Austria     | $178.36        |
 | Switzerland | $117.17        |
 | France      | $113.99        |
+
+* DONE 27. High freight charges with between
+CLOSED: [2022-11-27 dom 19:35]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-27 dom 19:35]
+- State "IN_PROGRESS" from              [2022-11-27 dom 15:25]
+:END:
+
+** Book query
+
+#+begin_src sql
+  SELECT ShipCountry, AVG(CAST(Freight AS NUMERIC(10,5))) AS AverageFreight
+  FROM Orders
+  WHERE OrderDate BETWEEN '20150101' AND '20151231'
+  GROUP BY ShipCountry
+  ORDER BY AverageFreight DESC LIMIT 3
+#+end_src
+
+#+RESULTS:
+| shipcountry |       averagefreight |
+|-------------+----------------------|
+| Austria     | 178.3642857142857143 |
+| Switzerland | 117.1775000000000000 |
+| Sweden      | 105.1600000000000000 |
+
+** Getting the the orders
+
+Lets see what are the orders returned by the solution [[*26. High freight charges - 2015][26. High freight charges - 2015]] and the query given in this query.
+
+#+begin_src sql
+  SELECT OrderID, ShipCountry, OrderDate
+  FROM Orders
+  WHERE OrderDate BETWEEN '20150101' AND '20151231'
+  ORDER BY OrderDate Desc
+
+#+end_src
+
+#+RESULTS:
+| orderid | shipcountry | orderdate           |
+|---------+-------------+---------------------|
+|   10804 | UK          | 2015-12-30 20:00:00 |
+|   10805 | USA         | 2015-12-30 17:00:00 |
+|   10803 | Brazil      | 2015-12-30 04:00:00 |
+
+The second query
+
+#+begin_src sql
+  SELECT OrderID, ShipCountry, OrderDate
+  FROM Orders
+  WHERE EXTRACT(YEAR FROM OrderDate) = 2015
+  ORDER BY OrderDate Desc
+#+end_src
+
+#+RESULTS:
+| orderid | shipcountry | orderdate           |
+|---------+-------------+---------------------|
+|   10807 | Italy       | 2015-12-31 11:00:00 |
+|   10806 | France      | 2015-12-31 11:00:00 |
+|   10804 | UK          | 2015-12-30 20:00:00 |
+|   10805 | USA         | 2015-12-30 17:00:00 |
+|   10803 | Brazil      | 2015-12-30 04:00:00 |
+|   10801 | Spain       | 2015-12-29 14:00:00 |
+|   10802 | Denmark     | 2015-12-29 10:00:00 |
+|   10799 | Germany     | 2015-12-26 14:00:00 |
+|   10800 | UK          | 2015-12-26 13:00:00 |
+|   10798 | UK          | 2015-12-26 12:00:00 |
+|   10796 | Venezuela   | 2015-12-25 16:00:00 |
+|   10797 | Germany     | 2015-12-25 14:00:00 |
+|   10793 | UK          | 2015-12-24 21:00:00 |
+|   10795 | Austria     | 2015-12-24 11:00:00 |
+|   10794 | Brazil      | 2015-12-24 03:00:00 |
+|   10791 | Germany     | 2015-12-23 12:00:00 |
+|   10792 | Poland      | 2015-12-23 11:00:00 |
+|   10789 | France      | 2015-12-22 21:00:00 |
+|   10790 | Brazil      | 2015-12-22 17:00:00 |
+|   10788 | Germany     | 2015-12-22 01:00:00 |
+|   10786 | Brazil      | 2015-12-19 16:00:00 |
+|   10787 | France      | 2015-12-19 07:00:00 |
+|   10783 | Brazil      | 2015-12-18 15:00:00 |
+|   10785 | Venezuela   | 2015-12-18 11:00:00 |
+|   10784 | Italy       | 2015-12-18 04:00:00 |
+|   10782 | Argentina   | 2015-12-17 13:00:00 |
+|   10781 | Finland     | 2015-12-17 02:00:00 |
+|   10780 | Venezuela   | 2015-12-16 22:00:00 |
+|   10778 | Sweden      | 2015-12-16 07:00:00 |
+|   10779 | Germany     | 2015-12-16 04:00:00 |
+|   10776 | Austria     | 2015-12-15 19:00:00 |
+|   10777 | Brazil      | 2015-12-15 08:00:00 |
+|   10775 | USA         | 2015-12-12 13:00:00 |
+|   10774 | Sweden      | 2015-12-11 11:00:00 |
+|   10773 | Austria     | 2015-12-11 05:00:00 |
+|   10771 | Austria     | 2015-12-10 12:00:00 |
+|   10772 | Germany     | 2015-12-10 12:00:00 |
+|   10770 | Brazil      | 2015-12-09 03:00:00 |
+|   10768 | UK          | 2015-12-08 20:00:00 |
+|   10769 | Denmark     | 2015-12-08 19:00:00 |
+|   10767 | Belgium     | 2015-12-05 22:00:00 |
+|   10766 | Germany     | 2015-12-05 02:00:00 |
+|   10765 | Germany     | 2015-12-04 10:00:00 |
+|   10764 | Austria     | 2015-12-03 12:00:00 |
+|   10763 | France      | 2015-12-03 05:00:00 |
+|   10761 | USA         | 2015-12-02 08:00:00 |
+|   10762 | Sweden      | 2015-12-02 00:00:00 |
+|   10760 | Belgium     | 2015-12-01 17:00:00 |
+|   10758 | Switzerland | 2015-11-28 11:00:00 |
+|   10759 | Mexico      | 2015-11-28 06:00:00 |
+|   10756 | USA         | 2015-11-27 20:00:00 |
+|   10757 | USA         | 2015-11-27 02:00:00 |
+|   10755 | France      | 2015-11-26 03:00:00 |
+|   10753 | Italy       | 2015-11-25 07:00:00 |
+|   10754 | Italy       | 2015-11-25 03:00:00 |
+|   10752 | UK          | 2015-11-24 22:00:00 |
+|   10751 | Switzerland | 2015-11-24 03:00:00 |
+|   10750 | Finland     | 2015-11-21 16:00:00 |
+|   10748 | USA         | 2015-11-20 14:00:00 |
+|   10749 | UK          | 2015-11-20 00:00:00 |
+|   10747 | Austria     | 2015-11-19 12:00:00 |
+|   10746 | Switzerland | 2015-11-19 10:00:00 |
+|   10745 | Germany     | 2015-11-18 08:00:00 |
+|   10743 | UK          | 2015-11-17 18:00:00 |
+|   10744 | Denmark     | 2015-11-17 08:00:00 |
+|   10742 | Canada      | 2015-11-14 12:00:00 |
+|   10741 | UK          | 2015-11-14 10:00:00 |
+|   10740 | USA         | 2015-11-13 16:00:00 |
+|   10739 | France      | 2015-11-12 10:00:00 |
+|   10738 | France      | 2015-11-12 03:00:00 |
+|   10737 | France      | 2015-11-11 13:00:00 |
+|   10736 | Ireland     | 2015-11-11 05:00:00 |
+|   10735 | USA         | 2015-11-10 20:00:00 |
+|   10734 | Brazil      | 2015-11-07 05:00:00 |
+|   10733 | Sweden      | 2015-11-07 02:00:00 |
+|   10732 | France      | 2015-11-06 15:00:00 |
+|   10731 | Switzerland | 2015-11-06 13:00:00 |
+|   10730 | France      | 2015-11-05 07:00:00 |
+|   10729 | Venezuela   | 2015-11-04 20:00:00 |
+|   10728 | Brazil      | 2015-11-04 16:00:00 |
+|   10727 | Italy       | 2015-11-03 20:00:00 |
+|   10726 | UK          | 2015-11-03 05:00:00 |
+|   10725 | Brazil      | 2015-10-31 00:00:00 |
+|   10723 | USA         | 2015-10-30 22:00:00 |
+|   10724 | Canada      | 2015-10-30 05:00:00 |
+|   10721 | Germany     | 2015-10-29 08:00:00 |
+|   10722 | USA         | 2015-10-29 03:00:00 |
+|   10720 | Brazil      | 2015-10-28 17:00:00 |
+|   10719 | USA         | 2015-10-27 17:00:00 |
+|   10718 | Germany     | 2015-10-27 10:00:00 |
+|   10716 | Argentina   | 2015-10-24 05:00:00 |
+|   10717 | Germany     | 2015-10-24 04:00:00 |
+|   10715 | France      | 2015-10-23 14:00:00 |
+|   10714 | USA         | 2015-10-22 03:00:00 |
+|   10713 | USA         | 2015-10-22 00:00:00 |
+|   10712 | Ireland     | 2015-10-21 10:00:00 |
+|   10711 | USA         | 2015-10-21 03:00:00 |
+|   10710 | Italy       | 2015-10-20 10:00:00 |
+|   10709 | Brazil      | 2015-10-17 13:00:00 |
+|   10708 | USA         | 2015-10-17 11:00:00 |
+|   10706 | USA         | 2015-10-16 15:00:00 |
+|   10707 | UK          | 2015-10-16 06:00:00 |
+|   10705 | Venezuela   | 2015-10-15 19:00:00 |
+|   10704 | Brazil      | 2015-10-14 18:00:00 |
+|   10703 | Sweden      | 2015-10-14 16:00:00 |
+|   10702 | Germany     | 2015-10-13 19:00:00 |
+|   10701 | Ireland     | 2015-10-13 00:00:00 |
+|   10700 | USA         | 2015-10-10 19:00:00 |
+|   10698 | Austria     | 2015-10-09 14:00:00 |
+|   10699 | Germany     | 2015-10-09 05:00:00 |
+|   10697 | Venezuela   | 2015-10-08 04:00:00 |
+|   10696 | USA         | 2015-10-08 00:00:00 |
+|   10695 | Finland     | 2015-10-07 08:00:00 |
+|   10694 | Germany     | 2015-10-06 10:00:00 |
+|   10693 | USA         | 2015-10-06 05:00:00 |
+|   10691 | Germany     | 2015-10-03 14:00:00 |
+|   10692 | Germany     | 2015-10-03 05:00:00 |
+|   10690 | Brazil      | 2015-10-02 04:00:00 |
+|   10688 | Denmark     | 2015-10-01 10:00:00 |
+|   10689 | Sweden      | 2015-10-01 06:00:00 |
+|   10686 | Austria     | 2015-09-30 00:00:00 |
+|   10687 | Ireland     | 2015-09-30 00:00:00 |
+|   10685 | Brazil      | 2015-09-29 00:00:00 |
+|   10683 | France      | 2015-09-26 18:00:00 |
+|   10684 | Germany     | 2015-09-26 01:00:00 |
+|   10682 | Mexico      | 2015-09-25 04:00:00 |
+|   10681 | USA         | 2015-09-25 00:00:00 |
+|   10680 | USA         | 2015-09-24 16:00:00 |
+|   10678 | USA         | 2015-09-23 20:00:00 |
+|   10679 | France      | 2015-09-23 19:00:00 |
+|   10677 | Mexico      | 2015-09-22 20:00:00 |
+|   10676 | Mexico      | 2015-09-22 10:00:00 |
+|   10675 | Germany     | 2015-09-19 06:00:00 |
+|   10674 | UK          | 2015-09-18 17:00:00 |
+|   10673 | Finland     | 2015-09-18 08:00:00 |
+|   10672 | Sweden      | 2015-09-17 13:00:00 |
+|   10671 | France      | 2015-09-17 06:00:00 |
+|   10670 | Germany     | 2015-09-16 09:00:00 |
+|   10669 | Denmark     | 2015-09-15 22:00:00 |
+|   10668 | Germany     | 2015-09-15 14:00:00 |
+|   10667 | Austria     | 2015-09-12 21:00:00 |
+|   10666 | Switzerland | 2015-09-12 12:00:00 |
+|   10665 | USA         | 2015-09-11 06:00:00 |
+|   10663 | France      | 2015-09-10 12:00:00 |
+|   10664 | Portugal    | 2015-09-10 12:00:00 |
+|   10662 | USA         | 2015-09-09 22:00:00 |
+|   10661 | Ireland     | 2015-09-09 14:00:00 |
+|   10660 | USA         | 2015-09-08 03:00:00 |
+|   10659 | Brazil      | 2015-09-05 02:00:00 |
+|   10658 | Germany     | 2015-09-05 02:00:00 |
+|   10656 | USA         | 2015-09-04 11:00:00 |
+|   10657 | USA         | 2015-09-04 11:00:00 |
+|   10655 | Italy       | 2015-09-03 00:00:00 |
+|   10653 | Germany     | 2015-09-02 09:00:00 |
+|   10654 | Sweden      | 2015-09-02 07:00:00 |
+|   10652 | Brazil      | 2015-09-01 20:00:00 |
+|   10651 | Germany     | 2015-09-01 05:00:00 |
+|   10650 | Brazil      | 2015-08-29 06:00:00 |
+|   10648 | Brazil      | 2015-08-28 22:00:00 |
+|   10649 | Belgium     | 2015-08-28 00:00:00 |
+|   10647 | Brazil      | 2015-08-27 04:00:00 |
+|   10646 | Ireland     | 2015-08-27 00:00:00 |
+|   10645 | Brazil      | 2015-08-26 03:00:00 |
+|   10643 | Germany     | 2015-08-25 19:00:00 |
+|   10644 | Brazil      | 2015-08-25 07:00:00 |
+|   10641 | Venezuela   | 2015-08-22 04:00:00 |
+|   10642 | Denmark     | 2015-08-22 00:00:00 |
+|   10640 | Germany     | 2015-08-21 07:00:00 |
+|   10638 | Venezuela   | 2015-08-20 16:00:00 |
+|   10639 | Norway      | 2015-08-20 06:00:00 |
+|   10637 | Brazil      | 2015-08-19 16:00:00 |
+|   10636 | Finland     | 2015-08-19 15:00:00 |
+|   10635 | Italy       | 2015-08-18 13:00:00 |
+|   10634 | France      | 2015-08-15 13:00:00 |
+|   10633 | Austria     | 2015-08-15 06:00:00 |
+|   10632 | Germany     | 2015-08-14 03:00:00 |
+|   10631 | France      | 2015-08-14 01:00:00 |
+|   10630 | Germany     | 2015-08-13 10:00:00 |
+|   10629 | Spain       | 2015-08-12 15:00:00 |
+|   10628 | France      | 2015-08-12 15:00:00 |
+|   10627 | USA         | 2015-08-11 15:00:00 |
+|   10626 | Sweden      | 2015-08-11 06:00:00 |
+|   10625 | Mexico      | 2015-08-08 15:00:00 |
+|   10624 | USA         | 2015-08-07 05:00:00 |
+|   10623 | Germany     | 2015-08-07 02:00:00 |
+|   10622 | Brazil      | 2015-08-06 06:00:00 |
+|   10621 | UK          | 2015-08-05 16:00:00 |
+|   10620 | Canada      | 2015-08-05 07:00:00 |
+|   10619 | Canada      | 2015-08-04 04:00:00 |
+|   10618 | Canada      | 2015-08-01 04:00:00 |
+|   10617 | USA         | 2015-07-31 00:00:00 |
+|   10616 | USA         | 2015-07-31 00:00:00 |
+|   10615 | Finland     | 2015-07-30 16:00:00 |
+|   10614 | Germany     | 2015-07-29 09:00:00 |
+|   10613 | Venezuela   | 2015-07-29 05:00:00 |
+|   10612 | USA         | 2015-07-28 18:00:00 |
+|   10610 | France      | 2015-07-25 16:00:00 |
+|   10611 | Poland      | 2015-07-25 06:00:00 |
+|   10609 | France      | 2015-07-24 11:00:00 |
+|   10608 | Germany     | 2015-07-23 10:00:00 |
+|   10607 | USA         | 2015-07-22 09:00:00 |
+|   10606 | Brazil      | 2015-07-22 00:00:00 |
+|   10605 | Canada      | 2015-07-21 22:00:00 |
+|   10603 | USA         | 2015-07-18 09:00:00 |
+|   10604 | Portugal    | 2015-07-18 07:00:00 |
+|   10602 | Denmark     | 2015-07-17 21:00:00 |
+|   10601 | Venezuela   | 2015-07-16 11:00:00 |
+|   10600 | USA         | 2015-07-16 10:00:00 |
+|   10599 | UK          | 2015-07-15 06:00:00 |
+|   10598 | USA         | 2015-07-14 05:00:00 |
+|   10597 | Austria     | 2015-07-11 07:00:00 |
+|   10596 | USA         | 2015-07-11 06:00:00 |
+|   10595 | Austria     | 2015-07-10 17:00:00 |
+|   10594 | USA         | 2015-07-09 17:00:00 |
+|   10593 | Germany     | 2015-07-09 10:00:00 |
+|   10592 | Germany     | 2015-07-08 20:00:00 |
+|   10591 | Denmark     | 2015-07-07 13:00:00 |
+|   10590 | Canada      | 2015-07-07 09:00:00 |
+|   10589 | USA         | 2015-07-04 17:00:00 |
+|   10588 | Germany     | 2015-07-03 17:00:00 |
+|   10586 | Italy       | 2015-07-02 10:00:00 |
+|   10587 | Brazil      | 2015-07-02 03:00:00 |
+|   10585 | Brazil      | 2015-07-01 13:00:00 |
+|   10583 | Finland     | 2015-06-30 00:00:00 |
+|   10584 | France      | 2015-06-30 00:00:00 |
+|   10582 | Germany     | 2015-06-27 22:00:00 |
+|   10580 | Germany     | 2015-06-26 19:00:00 |
+|   10581 | Brazil      | 2015-06-26 11:00:00 |
+|   10579 | USA         | 2015-06-25 19:00:00 |
+|   10578 | UK          | 2015-06-24 15:00:00 |
+|   10577 | USA         | 2015-06-23 19:00:00 |
+|   10576 | Mexico      | 2015-06-23 13:00:00 |
+|   10575 | Germany     | 2015-06-20 22:00:00 |
+|   10574 | USA         | 2015-06-19 14:00:00 |
+|   10573 | Mexico      | 2015-06-19 02:00:00 |
+|   10572 | Sweden      | 2015-06-18 05:00:00 |
+|   10571 | Austria     | 2015-06-17 15:00:00 |
+|   10570 | Canada      | 2015-06-17 11:00:00 |
+|   10569 | USA         | 2015-06-16 15:00:00 |
+|   10568 | Spain       | 2015-06-13 18:00:00 |
+|   10567 | Ireland     | 2015-06-12 19:00:00 |
+|   10566 | France      | 2015-06-12 18:00:00 |
+|   10565 | Canada      | 2015-06-11 22:00:00 |
+|   10563 | Brazil      | 2015-06-10 22:00:00 |
+|   10564 | USA         | 2015-06-10 00:00:00 |
+|   10562 | Italy       | 2015-06-09 19:00:00 |
+|   10561 | Sweden      | 2015-06-06 21:00:00 |
+|   10560 | Germany     | 2015-06-06 12:00:00 |
+|   10559 | France      | 2015-06-05 04:00:00 |
+|   10558 | UK          | 2015-06-04 14:00:00 |
+|   10557 | Germany     | 2015-06-03 22:00:00 |
+|   10556 | Denmark     | 2015-06-03 14:00:00 |
+|   10555 | USA         | 2015-06-02 22:00:00 |
+|   10554 | Germany     | 2015-05-30 21:00:00 |
+|   10553 | Finland     | 2015-05-30 03:00:00 |
+|   10552 | Venezuela   | 2015-05-29 08:00:00 |
+|   10550 | Spain       | 2015-05-28 18:00:00 |
+|   10551 | Portugal    | 2015-05-28 06:00:00 |
+|   10549 | Germany     | 2015-05-27 03:00:00 |
+|   10548 | Germany     | 2015-05-26 11:00:00 |
+|   10547 | UK          | 2015-05-23 16:00:00 |
+|   10546 | France      | 2015-05-23 00:00:00 |
+|   10545 | USA         | 2015-05-22 14:00:00 |
+|   10544 | USA         | 2015-05-21 04:00:00 |
+|   10543 | Venezuela   | 2015-05-21 03:00:00 |
+|   10542 | Germany     | 2015-05-20 20:00:00 |
+|   10541 | Brazil      | 2015-05-19 13:00:00 |
+|   10540 | Germany     | 2015-05-19 05:00:00 |
+|   10539 | UK          | 2015-05-16 18:00:00 |
+|   10538 | UK          | 2015-05-15 10:00:00 |
+|   10536 | Germany     | 2015-05-14 10:00:00 |
+|   10537 | Switzerland | 2015-05-14 02:00:00 |
+|   10535 | Mexico      | 2015-05-13 07:00:00 |
+|   10533 | Sweden      | 2015-05-12 22:00:00 |
+|   10534 | Germany     | 2015-05-12 06:00:00 |
+|   10532 | UK          | 2015-05-09 04:00:00 |
+|   10530 | Austria     | 2015-05-08 19:00:00 |
+|   10531 | Argentina   | 2015-05-08 01:00:00 |
+|   10529 | Belgium     | 2015-05-07 01:00:00 |
+|   10528 | USA         | 2015-05-06 12:00:00 |
+|   10527 | Germany     | 2015-05-05 08:00:00 |
+|   10526 | Finland     | 2015-05-05 02:00:00 |
+|   10525 | France      | 2015-05-02 01:00:00 |
+|   10524 | Sweden      | 2015-05-01 15:00:00 |
+|   10523 | UK          | 2015-05-01 13:00:00 |
+|   10522 | Germany     | 2015-04-30 00:00:00 |
+|   10521 | Argentina   | 2015-04-29 17:00:00 |
+|   10520 | Norway      | 2015-04-29 08:00:00 |
+|   10519 | Switzerland | 2015-04-28 06:00:00 |
+|   10518 | Mexico      | 2015-04-25 13:00:00 |
+|   10517 | UK          | 2015-04-24 08:00:00 |
+|   10516 | Ireland     | 2015-04-24 06:00:00 |
+|   10515 | Germany     | 2015-04-23 17:00:00 |
+|   10514 | Austria     | 2015-04-22 08:00:00 |
+|   10513 | Germany     | 2015-04-22 05:00:00 |
+|   10512 | Brazil      | 2015-04-21 08:00:00 |
+|   10510 | USA         | 2015-04-18 22:00:00 |
+|   10511 | France      | 2015-04-18 01:00:00 |
+|   10509 | Germany     | 2015-04-17 22:00:00 |
+|   10508 | Germany     | 2015-04-16 18:00:00 |
+|   10506 | Germany     | 2015-04-15 06:00:00 |
+|   10507 | Mexico      | 2015-04-15 05:00:00 |
+|   10505 | Canada      | 2015-04-14 11:00:00 |
+|   10503 | Ireland     | 2015-04-11 21:00:00 |
+|   10504 | USA         | 2015-04-11 00:00:00 |
+|   10502 | Mexico      | 2015-04-10 10:00:00 |
+|   10500 | France      | 2015-04-09 21:00:00 |
+|   10501 | Germany     | 2015-04-09 19:00:00 |
+|   10499 | Venezuela   | 2015-04-08 11:00:00 |
+|   10498 | Venezuela   | 2015-04-07 00:00:00 |
+|   10497 | Germany     | 2015-04-04 22:00:00 |
+|   10496 | Brazil      | 2015-04-04 03:00:00 |
+|   10495 | Canada      | 2015-04-03 01:00:00 |
+|   10493 | France      | 2015-04-02 22:00:00 |
+|   10494 | Brazil      | 2015-04-02 05:00:00 |
+|   10492 | Canada      | 2015-04-01 07:00:00 |
+|   10491 | Portugal    | 2015-03-31 00:00:00 |
+|   10490 | Venezuela   | 2015-03-31 00:00:00 |
+|   10489 | Austria     | 2015-03-28 06:00:00 |
+|   10488 | Germany     | 2015-03-27 01:00:00 |
+|   10487 | Brazil      | 2015-03-26 21:00:00 |
+|   10486 | Venezuela   | 2015-03-26 17:00:00 |
+|   10485 | Venezuela   | 2015-03-25 17:00:00 |
+|   10484 | UK          | 2015-03-24 17:00:00 |
+|   10483 | USA         | 2015-03-24 07:00:00 |
+|   10482 | USA         | 2015-03-21 02:00:00 |
+|   10481 | Brazil      | 2015-03-20 17:00:00 |
+|   10480 | France      | 2015-03-20 11:00:00 |
+|   10479 | USA         | 2015-03-19 01:00:00 |
+|   10478 | France      | 2015-03-18 20:00:00 |
+|   10477 | Portugal    | 2015-03-17 02:00:00 |
+|   10476 | Venezuela   | 2015-03-17 00:00:00 |
+|   10475 | Belgium     | 2015-03-14 11:00:00 |
+|   10474 | Mexico      | 2015-03-13 16:00:00 |
+|   10473 | UK          | 2015-03-13 06:00:00 |
+|   10472 | UK          | 2015-03-12 01:00:00 |
+|   10471 | UK          | 2015-03-11 06:00:00 |
+|   10470 | France      | 2015-03-11 02:00:00 |
+|   10469 | USA         | 2015-03-10 20:00:00 |
+|   10468 | Germany     | 2015-03-07 03:00:00 |
+|   10467 | Italy       | 2015-03-06 01:00:00 |
+|   10466 | Brazil      | 2015-03-06 01:00:00 |
+|   10465 | Denmark     | 2015-03-05 08:00:00 |
+|   10464 | Portugal    | 2015-03-04 15:00:00 |
+|   10463 | Belgium     | 2015-03-04 13:00:00 |
+|   10462 | UK          | 2015-03-03 08:00:00 |
+|   10460 | Sweden      | 2015-02-28 00:00:00 |
+|   10461 | Venezuela   | 2015-02-28 00:00:00 |
+|   10459 | France      | 2015-02-27 13:00:00 |
+|   10458 | Belgium     | 2015-02-26 00:00:00 |
+|   10457 | Germany     | 2015-02-25 19:00:00 |
+|   10456 | Germany     | 2015-02-25 18:00:00 |
+|   10455 | Finland     | 2015-02-24 11:00:00 |
+|   10454 | France      | 2015-02-21 21:00:00 |
+|   10453 | UK          | 2015-02-21 17:00:00 |
+|   10452 | USA         | 2015-02-20 13:00:00 |
+|   10450 | France      | 2015-02-19 20:00:00 |
+|   10451 | Germany     | 2015-02-19 08:00:00 |
+|   10449 | France      | 2015-02-18 13:00:00 |
+|   10448 | Argentina   | 2015-02-17 10:00:00 |
+|   10447 | Brazil      | 2015-02-14 07:00:00 |
+|   10446 | Germany     | 2015-02-14 00:00:00 |
+|   10445 | Sweden      | 2015-02-13 20:00:00 |
+|   10444 | Sweden      | 2015-02-12 11:00:00 |
+|   10443 | Italy       | 2015-02-12 01:00:00 |
+|   10442 | Austria     | 2015-02-11 03:00:00 |
+|   10441 | USA         | 2015-02-10 16:00:00 |
+|   10440 | USA         | 2015-02-10 15:00:00 |
+|   10439 | Canada      | 2015-02-07 10:00:00 |
+|   10438 | Germany     | 2015-02-06 21:00:00 |
+|   10436 | France      | 2015-02-05 19:00:00 |
+|   10437 | Finland     | 2015-02-05 14:00:00 |
+|   10435 | UK          | 2015-02-04 20:00:00 |
+|   10434 | Sweden      | 2015-02-03 21:00:00 |
+|   10433 | Portugal    | 2015-02-03 09:00:00 |
+|   10432 | USA         | 2015-01-31 00:00:00 |
+|   10431 | Canada      | 2015-01-30 12:00:00 |
+|   10430 | Austria     | 2015-01-30 09:00:00 |
+|   10429 | Ireland     | 2015-01-29 00:00:00 |
+|   10428 | Italy       | 2015-01-28 08:00:00 |
+|   10426 | Spain       | 2015-01-27 08:00:00 |
+|   10427 | Austria     | 2015-01-27 06:00:00 |
+|   10425 | France      | 2015-01-24 12:00:00 |
+|   10424 | Canada      | 2015-01-23 20:00:00 |
+|   10423 | Brazil      | 2015-01-23 01:00:00 |
+|   10422 | Italy       | 2015-01-22 05:00:00 |
+|   10421 | Brazil      | 2015-01-21 20:00:00 |
+|   10420 | Brazil      | 2015-01-21 08:00:00 |
+|   10419 | Switzerland | 2015-01-20 18:00:00 |
+|   10418 | Germany     | 2015-01-17 16:00:00 |
+|   10416 | Finland     | 2015-01-16 11:00:00 |
+|   10417 | Denmark     | 2015-01-16 07:00:00 |
+|   10415 | USA         | 2015-01-15 22:00:00 |
+|   10413 | France      | 2015-01-14 22:00:00 |
+|   10414 | Brazil      | 2015-01-14 22:00:00 |
+|   10412 | Finland     | 2015-01-13 20:00:00 |
+|   10411 | Canada      | 2015-01-10 21:00:00 |
+|   10410 | Canada      | 2015-01-10 18:00:00 |
+|   10409 | Argentina   | 2015-01-09 08:00:00 |
+|   10408 | France      | 2015-01-08 18:00:00 |
+|   10407 | Germany     | 2015-01-07 21:00:00 |
+|   10406 | Brazil      | 2015-01-07 18:00:00 |
+|   10405 | Venezuela   | 2015-01-06 01:00:00 |
+|   10404 | Italy       | 2015-01-03 21:00:00 |
+|   10403 | Austria     | 2015-01-03 01:00:00 |
+|   10402 | Austria     | 2015-01-02 18:00:00 |
+|   10400 | UK          | 2015-01-01 21:00:00 |
+|   10401 | USA         | 2015-01-01 15:00:00 |
+
+The answer to this problem is that the Between query only takes into account the specified date at the 0:00 hour, and thus
+all of the entries of the last day of the year are dismissed. In order to fix te query, we can simply specify the first day of 2016
+
+#+begin_src sql
+  SELECT ShipCountry, AVG(CAST(Freight AS NUMERIC(10,5))) AS AverageFreight
+  FROM Orders
+  WHERE OrderDate BETWEEN '20150101' AND '20160101'
+  GROUP BY ShipCountry
+  ORDER BY AverageFreight DESC LIMIT 3
+#+end_src
+
+#+RESULTS:
+| shipcountry |       averagefreight |
+|-------------+----------------------|
+| Austria     | 178.3642857142857143 |
+| Switzerland | 117.1775000000000000 |
+| France      | 113.9910256410256410 |
+
+* DONE 28. High freight charges last year
+CLOSED: [2022-11-27 dom 20:38]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-27 dom 20:38]
+- State "IN_PROGRESS" from              [2022-11-27 dom 19:35]
+:END:
+
+First, lets get the biggest =OrderDate= minus 12 months
+
+#+begin_src sql
+  SELECT MAX(OrderDate) - INTERVAL '12 month' as MaxOrderDateMinusOneYear
+  FROM Orders
+
+#+end_src
+
+#+RESULTS:
+| maxorderdateminusoneyear |
+|--------------------------|
+| 2015-05-06 18:00:00      |
+
+Then use this query as the filter to use in the were clause
+
+#+begin_src sql
+  SELECT ShipCountry, AVG(CAST(Freight AS NUMERIC(10, 5))) AS AverageFreight
+  FROM Orders
+  WHERE (
+  SELECT MAX(OrderDate) - INTERVAL '1 year' AS MaxOrderDateMinusOneYear
+  FROM Orders
+  ) < OrderDate
+  GROUP BY ShipCountry
+  ORDER BY AverageFreight DESC LIMIT 3
+#+end_src
+
+#+RESULTS:
+| shipcountry |       averagefreight |
+|-------------+----------------------|
+| Ireland     | 200.2100000000000000 |
+| Austria     | 186.4596000000000000 |
+| USA         | 119.3032558139534884 |
+
+* DONE 29. Employee/Order Detail report
+CLOSED: [2022-11-27 dom 22:56]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-27 dom 22:56]
+- State "IN_PROGRESS" from              [2022-11-27 dom 20:38]
+:END:
+
+
+#+begin_src sql
+  SELECT E.EmployeeID, LastName, O.OrderID, ProductName, Quantity
+  FROM Employees AS E JOIN Orders AS O ON E.EmployeeID=O.EmployeeID
+  JOIN OrderDetails AS OD ON O.OrderID=OD.OrderID
+  JOIN Products AS P ON OD.ProductID=P.ProductID
+  LIMIT 30
+#+end_src
+
+#+RESULTS:
+| employeeid | lastname  | orderid | productname                          | quantity |
+|------------+-----------+---------+--------------------------------------+----------|
+|          5 | Buchanan  |   10248 | Queso Cabrales                       |       12 |
+|          5 | Buchanan  |   10248 | Singaporean Hokkien Fried Mee        |       10 |
+|          5 | Buchanan  |   10248 | Mozzarella di Giovanni               |        5 |
+|          6 | Suyama    |   10249 | Tofu                                 |        9 |
+|          6 | Suyama    |   10249 | Manjimup Dried Apples                |       40 |
+|          4 | Peacock   |   10250 | Jack's New England Clam Chowder      |       10 |
+|          4 | Peacock   |   10250 | Manjimup Dried Apples                |       35 |
+|          4 | Peacock   |   10250 | Louisiana Fiery Hot Pepper Sauce     |       15 |
+|          3 | Leverling |   10251 | Gustaf's KnÃñckebrÃd               |        6 |
+|          3 | Leverling |   10251 | Ravioli Angelo                       |       15 |
+|          3 | Leverling |   10251 | Louisiana Fiery Hot Pepper Sauce     |       20 |
+|          4 | Peacock   |   10252 | Sir Rodney's Marmalade               |       40 |
+|          4 | Peacock   |   10252 | Geitost                              |       25 |
+|          4 | Peacock   |   10252 | Camembert Pierrot                    |       40 |
+|          3 | Leverling |   10253 | Gorgonzola Telino                    |       20 |
+|          3 | Leverling |   10253 | Chartreuse verte                     |       42 |
+|          3 | Leverling |   10253 | Maxilaku                             |       40 |
+|          5 | Buchanan  |   10254 | GuaranÃí FantÃística                 |       15 |
+|          5 | Buchanan  |   10254 | PÃótÃ© chinois                       |       21 |
+|          5 | Buchanan  |   10254 | Longlife Tofu                        |       21 |
+|          9 | Dodsworth |   10255 | Chang                                |       20 |
+|          9 | Dodsworth |   10255 | Pavlova                              |       35 |
+|          9 | Dodsworth |   10255 | Inlagd Sill                          |       25 |
+|          9 | Dodsworth |   10255 | Raclette Courdavault                 |       30 |
+|          3 | Leverling |   10256 | Perth Pasties                        |       15 |
+|          3 | Leverling |   10256 | Original Frankfurter grÃ¦ne SoÃe |       12 |
+|          4 | Peacock   |   10257 | Schoggi Schokolade                   |       25 |
+|          4 | Peacock   |   10257 | Chartreuse verte                     |        6 |
+|          4 | Peacock   |   10257 | Original Frankfurter grÃ¦ne SoÃe |       15 |
+|          1 | Davolio   |   10258 | Chang                                |       50 |
+
+* DONE 30. Customers with no orders
+CLOSED: [2022-11-27 dom 23:04]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-27 dom 23:04]
+- State "IN_PROGRESS" from              [2022-11-27 dom 22:57]
+:END:
+
+   * Left outer join is used to return all of te data in the left (previus) table regardless if it the matching condition occurs
+
+#+begin_src sql
+  SELECT C.CustomerID AS Customers_CustomerID,
+         O.CustomerID AS Orders_CustomerID
+  FROM Customers AS C LEFT JOIN Orders AS O ON C.CustomerID=O.CustomerID
+  WHERE O.CustomerID IS NULL
+#+end_src
+
+#+RESULTS:
+| customers_customerid | orders_customerid |
+|----------------------+-------------------|
+| FISSA                |                   |
+| PARIS                |                   |
+
+* DONE 31. Customers with no orders from EmployeeID 4
+CLOSED: [2022-11-28 lun 00:51]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-11-28 lun 00:51]
+- State "IN_PROGRESS" from              [2022-11-27 dom 23:04]
+:END:
+
+** First attemp
+
+I created a query where I left joined the =Customer= table with the =Orders= table. Henceforth, I used te aggregate function
+=ARRAY_AGG= to create a single list of all the employees that attended a customer. Using the =having= clause, I filtered
+all of the customers that did not have the EmployeeID 4 in the list, or did not haved a order at all.
+
+#+begin_src sql
+  SELECT C.CustomerID,  ARRAY_AGG(DISTINCT O.EmployeeID) AS Seller
+  FROM Customers AS C LEFT JOIN Orders AS O ON C.CustomerID=O.CustomerID
+  GROUP BY C.CustomerID HAVING NOT 4=ANY(ARRAY_AGG(O.EmployeeID)) OR ARRAY_AGG(O.EmployeeID)='{NULL}'
+  ORDER BY C.CustomerID
+#+end_src
+
+#+RESULTS:
+| customerid | seller          |
+|------------+-----------------|
+| CONSH      | {2,7,8}         |
+| DUMON      | {1,2,7}         |
+| FISSA      | {NULL}          |
+| FRANR      | {1,2,3}         |
+| GROSR      | {1,8}           |
+| LAUGB      | {2,3}           |
+| LAZYK      | {1,8}           |
+| NORTS      | {2,3}           |
+| PARIS      | {NULL}          |
+| PERIC      | {1,2,5,7,8}     |
+| PRINI      | {3,5,7,8}       |
+| SANTG      | {1,2,3,7}       |
+| SEVES      | {1,2,3,5,6,7,8} |
+| SPECD      | {2,3,5,6}       |
+| THEBI      | {1,2,6,8}       |
+| VINET      | {2,3,5,6}       |
+
+
+** Second attemp
+By adding the second condition on the join, we are returning all the data that either has been attended by the employee
+with the ID 4 or not and whether they have an order or not, if we add this condition after in the =WHERE= clause, allong with
+=CustomerID=NULL=, it will fail since the only entries that fill the first part of the condition are te ones that did not have and
+order in the first place, and thus, they do not have an =EmployeeID= either.
+
+Use this trick when we need to filter tables in a binary form (whether they have it or not)
+#+begin_src sql
+  SELECT C.CustomerID AS Customers_CustomerID,
+         O.CustomerID AS Orders_CustomerID
+  FROM Customers AS C LEFT JOIN Orders AS O ON C.CustomerID=O.CustomerID and O.Employeeid=4
+  WHERE O.CustomerID IS NULL
+
+#+end_src
+
+#+RESULTS:
+| customers_customerid | orders_customerid |
+|----------------------+-------------------|
+| CONSH                |                   |
+| DUMON                |                   |
+| FISSA                |                   |
+| FRANR                |                   |
+| GROSR                |                   |
+| LAUGB                |                   |
+| LAZYK                |                   |
+| NORTS                |                   |
+| PARIS                |                   |
+| PERIC                |                   |
+| PRINI                |                   |
+| SANTG                |                   |
+| SEVES                |                   |
+| SPECD                |                   |
+| THEBI                |                   |
+| VINET                |                   |
