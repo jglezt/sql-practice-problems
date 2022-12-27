@@ -995,7 +995,7 @@ all of the customers that did not have the EmployeeID 4 in the list, or did not 
 ** Second attemp
 By adding the second condition on the join, we are returning all the data that either has been attended by the employee
 with the ID 4 or not and whether they have an order or not, if we add this condition after in the =WHERE= clause, allong with
-=CustomerID=NULL=, it will fail since the only entries that fill the first part of the condition are te ones that did not have and
+=CustomerID=NULL=, it will fail since the only entries that fill the first part of the condition are te ones that did not have an
 order in the first place, and thus, they do not have an =EmployeeID= either. This only makes sense for this case
 since an customer ID only has an entry related with the employeeid if it was attended by the employee. If that condition of duality is not meet, like
 for example, when if we whant to know which employees not attended a customer (since and both orders where the employee has attended and has not attended can occur)
