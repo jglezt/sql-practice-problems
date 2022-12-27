@@ -1,0 +1,73 @@
+:PROPERTIES:
+:header-args:sql: :engine postgresql
+:header-args:sql+: :dbuser postgres
+:header-args:sql+: :dbpassword postgres
+:header-args:sql+: :database sql_problems
+:header-args:sql+: :dbhost 127.0.0.1
+:header-args:sql+: :dbport 5432
+:END:
+* DONE 32. High-value customers
+CLOSED: [2022-12-26 lun 23:48]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-12-26 lun 23:48]
+- State "IN_PROGRESS" from              [2022-12-26 lun 23:21]
+:END:
+
+#+begin_src sql
+  SELECT
+          O.CustomerID,
+          C.CompanyName,
+          O.OrderID,
+          SUM(UnitPrice * Quantity) AS TotalOrderAmount
+  FROM Orders AS O
+       JOIN Customers AS C ON O.CustomerID=C.CustomerID
+       JOIN OrderDetails AS OD ON O.OrderID=OD.OrderId
+  WHERE EXTRACT(YEAR FROM OrderDate) = 2016
+  GROUP BY O.CustomerID, C.CompanyName, O.OrderID
+  HAVING CAST(SUM(UnitPrice * Quantity) AS DECIMAL) > 10000
+  ORDER BY TotalOrderAmount DESC
+#+end_src
+
+#+RESULTS:
+| customerid | companyname                  | orderid | totalorderamount |
+|------------+------------------------------+---------+------------------|
+| QUICK      | QUICK-Stop                   |   10865 | $17,250.00       |
+| SAVEA      | Save-a-lot Markets           |   11030 | $16,321.90       |
+| HANAR      | Hanari Carnes                |   10981 | $15,810.00       |
+| KOENE      | KÃniglich Essen            |   10817 | $11,490.70       |
+| RATTC      | Rattlesnake Canyon Grocery   |   10889 | $11,380.00       |
+| HUNGO      | Hungry Owl All-Night Grocers |   10897 | $10,835.24       |
+
+* DONE 33. High-value customers - total orders
+CLOSED: [2022-12-26 lun 23:48]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2022-12-26 lun 23:48]
+- State "IN_PROGRESS" from              [2022-12-26 lun 23:21]
+:END:
+
+#+begin_src sql
+  SELECT
+          O.CustomerID,
+          C.CompanyName,
+          SUM(UnitPrice * Quantity) AS TotalOrderAmount
+  FROM Orders AS O
+       JOIN Customers AS C ON O.CustomerID=C.CustomerID
+       JOIN OrderDetails AS OD ON O.OrderID=OD.OrderId
+  WHERE EXTRACT(YEAR FROM OrderDate) = 2016
+  GROUP BY O.CustomerID, C.CompanyName
+  HAVING CAST(SUM(UnitPrice * Quantity) AS DECIMAL) > 15000
+  ORDER BY TotalOrderAmount DESC
+#+end_src
+
+#+RESULTS:
+| customerid | companyname                  | totalorderamount |
+|------------+------------------------------+------------------|
+| SAVEA      | Save-a-lot Markets           | $42,806.25       |
+| ERNSH      | Ernst Handel                 | $42,598.90       |
+| QUICK      | QUICK-Stop                   | $40,526.99       |
+| HANAR      | Hanari Carnes                | $24,238.05       |
+| HUNGO      | Hungry Owl All-Night Grocers | $22,796.34       |
+| RATTC      | Rattlesnake Canyon Grocery   | $21,725.60       |
+| KOENE      | KÃniglich Essen            | $20,204.95       |
+| FOLKO      | Folk och fÃñ HB              | $15,973.85       |
+| WHITC      | White Clover Markets         | $15,278.90       |
