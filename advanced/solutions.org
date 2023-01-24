@@ -71,3 +71,182 @@ CLOSED: [2022-12-26 lun 23:48]
 | KOENE      | KÃniglich Essen            | $20,204.95       |
 | FOLKO      | Folk och fÃñ HB              | $15,973.85       |
 | WHITC      | White Clover Markets         | $15,278.90       |
+
+* DONE 34. High value customers - with discount
+CLOSED: [2023-01-23 Mon 20:50]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2023-01-23 Mon 20:50]
+- State "IN_PROGRESS" from              [2023-01-02 Mon 20:42]
+:END:
+
+  #+begin_src sql
+    SELECT
+            O.CustomerID,
+            C.CompanyName,
+            SUM(UnitPrice * Quantity) AS TotalWithoutDiscount,
+            SUM((UnitPrice * Quantity) - (UnitPrice * Quantity) * Discount) as TotalWithDiscount
+    FROM Orders AS O
+         JOIN Customers AS C ON O.CustomerID=C.CustomerID
+         JOIN OrderDetails AS OD ON O.OrderID=OD.OrderId
+    WHERE EXTRACT(YEAR FROM OrderDate) = 2016
+    GROUP BY O.CustomerID, C.CompanyName
+    HAVING CAST(SUM((UnitPrice * Quantity) - (UnitPrice * Quantity) * Discount) AS DECIMAL) > 15000
+    ORDER BY TotalWithDiscount DESC
+  #+end_src
+
+  #+RESULTS:
+  | customerid | companyname                  | totalwithoutdiscount | totalwithdiscount |
+  |------------+------------------------------+----------------------+-------------------|
+  | ERNSH      | Ernst Handel                 | $42,598.90           | $41,210.65        |
+  | QUICK      | QUICK-Stop                   | $40,526.99           | $37,217.32        |
+  | SAVEA      | Save-a-lot Markets           | $42,806.25           | $36,310.11        |
+  | HANAR      | Hanari Carnes                | $24,238.05           | $23,821.20        |
+  | RATTC      | Rattlesnake Canyon Grocery   | $21,725.60           | $21,238.27        |
+  | HUNGO      | Hungry Owl All-Night Grocers | $22,796.34           | $20,402.12        |
+  | KOENE      | KÃniglich Essen            | $20,204.95           | $19,582.77        |
+  | WHITC      | White Clover Markets         | $15,278.90           | $15,278.90        |
+
+* DONE 35. Month-end orders
+CLOSED: [2023-01-23 Mon 22:07]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2023-01-23 Mon 22:07]
+- State "IN_PROGRESS" from              [2023-01-23 Mon 22:02]
+:END:
+
+#+begin_src sql
+  SELECT EmployeeID, OrderID, OrderDate
+  FROM Orders
+  WHERE OrderDate = (DATE_TRUNC('month', OrderDate) + INTERVAL '1 month - 1 day')
+  ORDER BY EmployeeID, OrderID
+#+end_src
+
+#+RESULTS:
+| employeeid | orderid | orderdate           |
+|------------+---------+---------------------|
+|          1 |   10461 | 2015-02-28 00:00:00 |
+|          1 |   10616 | 2015-07-31 00:00:00 |
+|          2 |   10583 | 2015-06-30 00:00:00 |
+|          2 |   10686 | 2015-09-30 00:00:00 |
+|          2 |   10989 | 2016-03-31 00:00:00 |
+|          2 |   11060 | 2016-04-30 00:00:00 |
+|          3 |   10432 | 2015-01-31 00:00:00 |
+|          3 |   10988 | 2016-03-31 00:00:00 |
+|          3 |   11063 | 2016-04-30 00:00:00 |
+|          4 |   10343 | 2014-10-31 00:00:00 |
+|          4 |   10522 | 2015-04-30 00:00:00 |
+|          4 |   10584 | 2015-06-30 00:00:00 |
+|          4 |   10617 | 2015-07-31 00:00:00 |
+|          4 |   10725 | 2015-10-31 00:00:00 |
+|          4 |   11061 | 2016-04-30 00:00:00 |
+|          4 |   11062 | 2016-04-30 00:00:00 |
+|          5 |   10269 | 2014-07-31 00:00:00 |
+|          6 |   10317 | 2014-09-30 00:00:00 |
+|          7 |   10490 | 2015-03-31 00:00:00 |
+|          8 |   10399 | 2014-12-31 00:00:00 |
+|          8 |   10460 | 2015-02-28 00:00:00 |
+|          8 |   10491 | 2015-03-31 00:00:00 |
+|          8 |   10987 | 2016-03-31 00:00:00 |
+|          9 |   10687 | 2015-09-30 00:00:00 |
+
+* DONE 36. Orders with many line items
+CLOSED: [2023-01-23 Mon 22:23]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2023-01-23 Mon 22:23]
+- State "IN_PROGRESS" from              [2023-01-23 Mon 22:08]
+:END:
+
+#+begin_src sql
+  SELECT O.OrderId, COUNT(ProductId) AS TotalOrderDetails
+  FROM Orders AS O JOIN OrderDetails AS OD ON O.OrderId=OD.OrderId
+  GROUP BY O.OrderId
+  ORDER BY TotalOrderDetails DESC, O.OrderId LIMIT 10
+
+#+end_src
+
+#+RESULTS:
+| orderid | totalorderdetails |
+|---------+-------------------|
+|   11077 |                25 |
+|   10657 |                 6 |
+|   10847 |                 6 |
+|   10979 |                 6 |
+|   10273 |                 5 |
+|   10294 |                 5 |
+|   10309 |                 5 |
+|   10324 |                 5 |
+|   10325 |                 5 |
+|   10337 |                 5 |
+
+* DONE 37. Orders - random assortment
+CLOSED: [2023-01-23 Mon 22:42]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2023-01-23 Mon 22:42]
+- State "IN_PROGRESS" from              [2023-01-23 Mon 22:23]
+:END:
+
+#+begin_src sql
+  SELECT OrderId FROM Orders ORDER BY random() LIMIT 17
+#+end_src
+
+#+RESULTS:
+| orderid |
+|---------|
+|   10678 |
+|   10410 |
+|   10277 |
+|   10870 |
+|   10532 |
+|   11062 |
+|   11043 |
+|   10467 |
+|   10285 |
+|   10360 |
+|   10280 |
+|   11040 |
+|   10900 |
+|   10920 |
+|   10800 |
+|   10630 |
+|   10683 |
+
+* DONE 38. Orders - accidental double-entry
+CLOSED: [2023-01-23 Mon 23:07]
+:LOGBOOK:
+- State "DONE"       from "IN_PROGRESS" [2023-01-23 Mon 23:07]
+- State "IN_PROGRESS" from              [2023-01-23 Mon 22:42]
+:END:
+
+ * Another interisting trick to use group by is that it help us identify which items have the same value across a group.
+   In this case, we can find which products within a order have the required quantity.
+
+#+begin_src sql
+  SELECT OrderId, Quantity
+  FROM OrderDetails
+  WHERE Quantity >= 60
+  GROUP BY OrderID, Quantity
+  HAVING COUNT(OrderID) >= 2
+  ORDER BY OrderId
+#+end_src
+
+#+RESULTS:
+| orderid | quantity |
+|---------+----------|
+|   10263 |       60 |
+|   10263 |       65 |
+|   10658 |       70 |
+|   10990 |       65 |
+|   11030 |      100 |
+
+#+begin_src sql
+ SELECT OrderId, Quantity
+  FROM OrderDetails
+  WHERE OrderId=10263
+#+end_src
+
+#+RESULTS:
+| orderid | quantity |
+|---------+----------|
+|   10263 |       60 |
+|   10263 |       65 |
+|   10263 |       60 |
+|   10263 |       65 |
